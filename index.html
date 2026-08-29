@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#0c1410"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<title>Семейный заём</title>
+<style>
+:root,[data-theme="dark"]{
+  --bg:#0c1410;--elev:#121c17;--subtle:#18241e;--fg:#f3ead8;--muted:#c4b496;--dim:#8f8168;
+  --gold:#c4a574;--gold2:#e8d0a4;--em:#3d6b56;--em2:#6ea88a;--ink:#07110c;--danger:#d07262;
+  --line:rgb(232 208 164/.14);--line2:rgb(232 208 164/.28);
+  --shadow:0 0 0 1px rgb(232 208 164/.1),0 18px 40px -24px rgb(0 0 0/.55);
+  --wash:radial-gradient(1200px 480px at 50% -10%,rgb(196 165 116/.12),transparent 60%);
+}
+[data-theme="light"]{
+  --bg:#f3ead8;--elev:#faf4e8;--subtle:#ece1c9;--fg:#1a2e24;--muted:#4a5c50;--dim:#6b7460;
+  --gold:#8a6a38;--gold2:#6f542c;--em:#245544;--em2:#1e4a3a;--ink:#13231c;--danger:#a33d30;
+  --line:rgb(26 46 36/.12);--line2:rgb(26 46 36/.22);
+  --shadow:0 0 0 1px rgb(26 46 36/.08),0 16px 36px -22px rgb(70 50 20/.28);
+  --wash:radial-gradient(1000px 420px at 50% -8%,rgb(196 165 116/.22),transparent 62%);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--fg);font-family:"Segoe UI","PT Sans",system-ui,sans-serif;line-height:1.55}
+.display{font-family:Palatino,"Iowan Old Style",Georgia,"Times New Roman",serif}
+button,a,input,summary{touch-action:manipulation;cursor:pointer}
+button{font:inherit;color:inherit;position:relative;z-index:2}
+a{color:var(--gold2)}
+.wrap{max-width:42rem;margin:0 auto;padding:0 1.25rem 4.5rem}
+.sticky{position:sticky;top:0;z-index:10;display:none;align-items:center;justify-content:space-between;gap:1rem;padding:.7rem 1.25rem;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.sticky.on{display:flex}
+.top{display:flex;align-items:center;justify-content:space-between;min-height:3.2rem}
+.k{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin:0}
+h1{font-weight:500;font-size:clamp(2.4rem,8vw,4.2rem);margin:.35rem 0 0;letter-spacing:-.04em}
+h2{font-weight:500;font-size:clamp(1.6rem,5vw,2.2rem);margin:.35rem 0 0;letter-spacing:-.03em}
+.jewel{font-size:clamp(2.8rem,11vw,5rem);color:var(--gold2);margin:.15rem 0 0;letter-spacing:-.03em}
+.hero{position:relative;padding:1rem 0 1.6rem;background:var(--wash)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin:1.3rem 0}
+.card{background:var(--elev);border-radius:1.25rem;padding:1.1rem 1.15rem;box-shadow:var(--shadow)}
+dt{font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+dd{font-size:1.65rem;margin:.45rem 0 0}
+.em{color:var(--em2)}.g{color:var(--gold2)}.muted{color:var(--muted)}.dim{color:var(--dim)}
+.btn{display:inline-flex;min-height:48px;align-items:center;justify-content:center;gap:.4rem;border:0;border-radius:999px;padding:.7rem 1.15rem;background:var(--gold);color:var(--ink);z-index:3}
+.btn2{background:transparent;color:var(--fg);box-shadow:0 0 0 1px var(--line2)}
+.btn:active,.pad button:active{transform:scale(.97)}
+.row{display:flex;flex-wrap:wrap;gap:.5rem;margin:.9rem 0}
+.bar{height:4px;border-radius:999px;background:var(--subtle);overflow:hidden;margin:.9rem 0 0;max-width:24rem}
+.bar>i{display:block;height:100%;background:var(--gold);width:0}
+.donut-wrap{position:relative;width:min(100%,280px);margin:0 auto}
+.donut-wrap svg{width:100%;transform:rotate(-90deg);pointer-events:none}
+.center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;pointer-events:none}
+.legend{display:flex;gap:1.2rem;justify-content:center;margin:1rem 0 0;font-size:.95rem}
+.sw{display:inline-block;width:.7rem;height:.7rem;border-radius:50%;margin-right:.4rem;vertical-align:middle}
+ul.list{list-style:none;padding:0;margin:.4rem 0 0;border-left:1px solid var(--line);padding-left:1.3rem}
+ul.list li{position:relative;padding:.2rem 0 1.4rem}
+ul.list li:before{content:"";position:absolute;left:-1.5rem;top:.55rem;width:.55rem;height:.55rem;border-radius:50%;background:var(--gold)}
+ul.list li.ghost{opacity:.45}
+ul.list li.ghost:before{background:var(--dim)}
+.date{font-size:1.2rem;margin:0}
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:.55rem;max-width:20rem;margin:0 auto}
+.pad button{min-height:56px;border:0;border-radius:999px;background:#2d3a33;color:#f3ead8;font-size:1.35rem;font-weight:600;z-index:8;box-shadow:0 0 0 1px #c4a574}
+.pad button:active{background:#c4a574;color:#07110c}
+[data-theme="light"] .pad button{background:#e8dcc4;color:#1a2e24;box-shadow:0 0 0 1px #8a6a38}
+.dots{display:flex;justify-content:center;gap:.55rem;margin:1rem 0}
+.dot{width:14px;height:14px;border-radius:50%;box-shadow:0 0 0 2px var(--gold)}
+.dot.on{background:var(--gold);box-shadow:none}
+.warn{color:var(--danger)}
+input,input[type=range]{width:100%;accent-color:var(--gold)}
+input[type=date],input[type=number]{min-height:48px;border:0;border-radius:.65rem;background:var(--subtle);color:var(--fg);padding:0 .8rem;font:inherit}
+label{display:block;color:var(--muted);font-size:.9rem;margin:.55rem 0}
+details.faq{border-top:1px solid var(--line)}
+details.faq summary{min-height:56px;display:flex;align-items:center;justify-content:space-between;list-style:none;font-size:1.2rem}
+details.faq summary::-webkit-details-marker{display:none}
+details.faq p{margin:0 0 1rem;color:var(--muted)}
+.toggle{display:flex;border-radius:999px;box-shadow:0 0 0 1px var(--line);overflow:hidden}
+.toggle button{border:0;background:transparent;min-height:38px;padding:0 .95rem;font-size:.85rem;color:var(--dim)}
+.toggle button.on{background:var(--gold);color:var(--ink)}
+.seal{width:4.4rem;height:4.4rem;flex-shrink:0;color:var(--gold)}
+.chart{width:100%;height:200px}
+.hint{font-size:.85rem;color:var(--dim);margin-top:1.2rem}
+.flash{margin:1rem 0;box-shadow:0 0 0 1px var(--gold)}
+.rule{height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:2rem 0 1.2rem;border:0}
+</style>
+</head>
+<body>
+<div class="sticky" id="sticky"><span class="k">Семейный заём</span><span class="display g" id="stickyRem">—</span></div>
+<div class="wrap">
+  <header class="hero">
+    <div class="top">
+      <span class="k" style="letter-spacing:.28em">№ 1</span>
+      <div class="toggle">
+        <button type="button" id="tDark">Тёмная</button>
+        <button type="button" id="tLight">Светлая</button>
+      </div>
+    </div>
+    <p class="k" style="margin-top:1.1rem" id="kicker">Москва</p>
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem">
+      <h1 class="display">Семейный заём</h1>
+      <svg class="seal" viewBox="0 0 240 240" aria-hidden="true">
+        <circle cx="120" cy="120" r="114" fill="none" stroke="currentColor" stroke-width="0.6" opacity="0.35"/>
+        <circle cx="120" cy="120" r="108" fill="none" stroke="currentColor" stroke-width="1.15"/>
+        <circle cx="120" cy="120" r="80" fill="none" stroke="currentColor" stroke-width="0.55" opacity="0.7"/>
+        <g fill="none" stroke="currentColor" stroke-linecap="round">
+          <path stroke-width="2.8" d="M82 78 H98M112 72 H128M142 78 H158"/>
+          <path stroke-width="3.6" d="M90 78 V150M120 72 V150M150 78 V150"/>
+          <path stroke-width="4.4" d="M78 150 H162"/>
+        </g>
+      </svg>
+    </div>
+    <p class="k" style="margin-top:1.6rem">Осталось</p>
+    <p class="jewel display" id="remaining">—</p>
+    <div class="bar"><i id="prog"></i></div>
+    <dl class="grid">
+      <div class="card">
+        <dt>Внесено</dt>
+        <dd class="display" id="paid">—</dd>
+        <div id="split" class="dim" style="margin-top:.7rem;font-size:.95rem"></div>
+      </div>
+      <div class="card">
+        <dt>Следующий</dt>
+        <dd class="display" id="nextAmt">—</dd>
+        <p class="g" id="due" style="margin:.7rem 0 0;font-size:.95rem"></p>
+      </div>
+    </dl>
+    <p class="muted" id="rateLine"></p>
+    <p><a href="https://www.cbr.ru/hd_base/keyrate/">Ключевая ставка ЦБ, cbr.ru</a></p>
+    <p class="dim" id="closeLine" style="margin:.5rem 0 0;font-size:.95rem"></p>
+    <p class="dim" style="margin:.9rem 0 0">Светлана Владимировна · Андрей Николаевич</p>
+  </header>
+
+  <section class="card" id="nextBox" style="margin:1.2rem 0">
+    <p class="k">Очередной платёж</p>
+    <p class="date display" id="nextDate" style="margin:.4rem 0 .15rem"></p>
+    <p class="g" id="nextDue" style="margin:0 0 1rem;font-size:.95rem"></p>
+    <div class="donut-wrap">
+      <svg viewBox="0 0 240 240" id="svgDonut"></svg>
+      <div class="center">
+        <p class="display" style="font-size:1.7rem;margin:0" id="donutAmt">25 000 ₽</p>
+        <p class="k" style="margin-top:.25rem">следующий</p>
+      </div>
+    </div>
+    <div class="legend">
+      <span><i class="sw" style="background:var(--gold)"></i>проценты <b id="legInt"></b></span>
+      <span><i class="sw" style="background:var(--em2)"></i>в долг <b id="legPrin"></b></span>
+    </div>
+  </section>
+
+  <div class="row">
+    <button type="button" class="btn" id="btnPay">Очередной</button>
+    <button type="button" class="btn btn2" id="btnEarly">Досрочно</button>
+    <button type="button" class="btn btn2" id="btnIcs">В календарь</button>
+  </div>
+
+  <div id="gate" hidden class="card">
+    <p class="k">Код записи</p>
+    <p>Смотреть можно без кода. Писать — нет.</p>
+    <div class="dots" id="dots"></div>
+    <p class="warn" id="pinErr" hidden>Не тот код</p>
+    <div class="pad" id="pad"></div>
+    <button type="button" class="btn btn2" id="pinCancel" style="margin-top:.8rem;width:100%;max-width:20rem">Отмена</button>
+  </div>
+
+  <div id="form" hidden class="card" style="margin-top:1rem">
+    <p class="k" id="formTitle">Очередной платёж</p>
+    <label>Дата зачисления<input type="date" id="date"></label>
+    <label>Сумма, ₽<input type="number" inputmode="numeric" id="amount" min="1"></label>
+    <p class="dim" id="preview"></p>
+    <div class="row">
+      <button type="button" class="btn" id="save">Записать</button>
+      <button type="button" class="btn btn2" id="payoff" hidden>Закрыть всё</button>
+      <button type="button" class="btn btn2" id="formCancel">Отмена</button>
+    </div>
+  </div>
+  <p id="flash" hidden class="card flash"></p>
+
+  <p class="k" style="margin-top:1.8rem">Семейная книга</p>
+  <h2 class="display">Лента платежей</h2>
+  <ul class="list" id="list"></ul>
+
+  <details class="card" style="margin-top:1.4rem" open>
+    <summary style="list-style:none">
+      <div>
+        <p class="k">Если ставка ЦБ изменится</p>
+        <p class="display" style="font-size:1.35rem;margin:.25rem 0 0">График остатка</p>
+      </div>
+    </summary>
+    <p class="dim" style="margin:.6rem 0">Сплошная — выбранная ставка. Тусклая — как сейчас, 15%.</p>
+    <label>Ключ ЦБ для графика
+      <input type="range" id="cbrSlide" min="8" max="21" step="0.25" value="14"/>
+    </label>
+    <p class="date display" id="slideVal" style="margin:.3rem 0 .7rem"></p>
+    <svg class="chart" id="spark" viewBox="0 0 320 200" preserveAspectRatio="none"></svg>
+    <p class="g" id="chartClose" style="margin:.6rem 0 0"></p>
+  </details>
+
+  <div class="card" style="margin-top:1.4rem">
+    <p class="k">Как перевести</p>
+    <p class="display" style="font-size:1.3rem;margin:.45rem 0 .2rem">Шлеенкова Светлана Владимировна</p>
+    <p><a href="tel:+79262284056">+7 926 228-40-56</a> · Т-Банк</p>
+    <p class="dim">Назначение: Возврат займа и процентов по договору займа от 26.08.2026</p>
+    <div class="row">
+      <button type="button" class="btn btn2" id="copyPhone">Скопировать номер</button>
+      <button type="button" class="btn btn2" id="copyPurpose">Скопировать назначение</button>
+    </div>
+  </div>
+
+  <p class="k" style="margin:1.8rem 0 .3rem">Простыми словами</p>
+  <h2 class="display">Как устроен заём</h2>
+  <div id="faq"></div>
+  <hr class="rule"/>
+  <p class="muted" style="max-width:36rem">Это наглядное приложение к договору займа № 1 от 26 августа 2026. Юридическую силу имеет бумажный договор.</p>
+  <p class="hint">Москва · Шлеенкова Светлана Владимировна и Шлеенков Андрей Николаевич.</p>
+</div>
+<script>
+const C={principal:1400000,payment:25000,rate:15,cbr:14,start:"2026-08-26",first:"2026-09-25",pin:"52193",phone:"+7 926 228-40-56",purpose:"Возврат займа и процентов по договору займа от 26.08.2026"};
+const rub=n=>new Intl.NumberFormat("ru-RU",{style:"currency",currency:"RUB",maximumFractionDigits:0}).format(Math.round(n));
+const utc=iso=>{const[y,m,d]=iso.split("-").map(Number);return Date.UTC(y,m-1,d)};
+const days=(a,b)=>Math.round((utc(b)-utc(a))/86400000);
+const today=()=>{const n=new Date();return n.getFullYear()+"-"+String(n.getMonth()+1).padStart(2,"0")+"-"+String(n.getDate()).padStart(2,"0")};
+const leap=y=>(y%4===0&&y%100!==0)||y%400===0;
+const addM=(iso,n)=>{const[y,m,d]=iso.split("-").map(Number);const dt=new Date(Date.UTC(y,m-1+n,1));const Y=dt.getUTCFullYear(),M=dt.getUTCMonth()+1;const dim=new Date(Date.UTC(Y,M,0)).getUTCDate();return Y+"-"+String(M).padStart(2,"0")+"-"+String(Math.min(d,dim)).padStart(2,"0")};
+function next25(iso){const[y,m,d]=iso.split("-").map(Number);if(d<25)return y+"-"+String(m).padStart(2,"0")+"-25";return addM(y+"-"+String(m).padStart(2,"0")+"-01",1).slice(0,8)+"25"}
+function interestAt(rate,bal,start,end){if(bal<=0||utc(end)<=utc(start))return 0;let total=0,cur=start;while(utc(cur)<utc(end)){const y=+cur.slice(0,4);const yearEnd=(y+1)+"-01-01";const nxt=utc(yearEnd)<utc(end)?yearEnd:end;const ds=days(cur,nxt);if(ds<=0)break;total+=bal*(rate/100)*(ds/(leap(y)?366:365));cur=nxt}return Math.round(total*100)/100}
+function interest(bal,start,end){return interestAt(C.rate,bal,start,end)}
+function dayMonth(iso){return new Intl.DateTimeFormat("ru-RU",{day:"numeric",month:"long",year:"numeric",timeZone:"UTC"}).format(new Date(iso+"T00:00:00Z"))}
+function monthYear(iso){return new Intl.DateTimeFormat("ru-RU",{month:"long",year:"numeric",timeZone:"UTC"}).format(new Date(iso+"T00:00:00Z"))}
+function dueIn(iso){const n=days(today(),iso);if(n===0)return"сегодня";if(n===1)return"завтра";if(n>1)return"через "+n+" дней";return"просрочено на "+(-n)+" дн."}
+const $=id=>document.getElementById(id);
+let payments=[],unlocked=false,pending=null,kind="scheduled";
+var SEED=[{"id":"p-seed-1","date":"2026-09-25","amount":25000,"kind":"scheduled"}];
+
+function load(){
+  try{payments=JSON.parse(localStorage.getItem("zaem-pay")||"[]")}catch(e){payments=[]}
+  if(!Array.isArray(payments))payments=[];
+  if(SEED&&SEED.length){
+    const ids={};payments.forEach(function(p){ids[p.id]=1});
+    SEED.forEach(function(p){if(!ids[p.id])payments.push(p)});
+  }
+}
+function saveAll(){localStorage.setItem("zaem-pay",JSON.stringify(payments))}
+function snapshotAt(rate){
+  let rem=C.principal,last=C.start,paid=0,pInt=0,pPrin=0,posted=[];
+  const list=payments.slice().sort((a,b)=>a.date.localeCompare(b.date));
+  for(const p of list){
+    const int=interestAt(rate,rem,last,p.date);
+    const toInt=Math.min(p.amount,int);
+    const prin=Math.min(Math.round((p.amount-toInt)*100)/100,rem);
+    rem=Math.max(0,Math.round((rem-prin)*100)/100);
+    paid+=p.amount;pInt+=toInt;pPrin+=prin;
+    posted.push({id:p.id,date:p.date,amount:p.amount,kind:p.kind,interest:toInt,principal:prin,rem,status:"posted"});
+    last=p.date;
+  }
+  const nextOn=rem<=0?null:(list.length?next25(list[list.length-1].date):C.first);
+  const nxtI=nextOn?interestAt(rate,rem,last,nextOn):0;
+  const nxtP=nextOn?Math.max(0,Math.round((C.payment-nxtI)*100)/100):0;
+  const ghosts=[];
+  let gRem=rem,gFrom=last,gOn=nextOn;
+  for(let i=0;i<4&&gRem>0&&gOn;i++){
+    const gi=interestAt(rate,gRem,gFrom,gOn);const gp=Math.min(Math.max(0,C.payment-gi),gRem);
+    const after=Math.max(0,Math.round((gRem-gp)*100)/100);
+    ghosts.push({id:"g"+i,date:gOn,amount:Math.min(C.payment,gRem+gi),interest:gi,principal:gp,rem:after,status:"projected",kind:"scheduled"});
+    gFrom=gOn;gRem=after;gOn=next25(gOn);
+  }
+  let closeOn=null,months=0,cur=rem,from=last,on=nextOn,points=[{date:from||C.start,bal:cur}],stalled=false;
+  while(cur>0&&months<240&&on){
+    const i=interestAt(rate,cur,from,on);const pr=Math.min(Math.max(0,C.payment-i),cur);
+    if(pr<=0){stalled=true;break}
+    cur=Math.round((cur-pr)*100)/100;from=on;closeOn=on;points.push({date:on,bal:cur});on=next25(on);months++;
+  }
+  return{rem,paid,pInt,pPrin,posted,ghosts,nextOn,nxtI,nxtP,last,closeOn,months,points,stalled};
+}
+function snapshot(){return snapshotAt(C.rate)}
+function drawDonut(int,prin){
+  const R=92,C0=2*Math.PI*R,sum=int+prin||1,fi=int/sum,gap=8;
+  const usable=Math.max(0,C0-gap*(fi>0.02&&fi<0.98?2:0));
+  const g=usable*fi,e=usable*(1-fi);
+  $("svgDonut").innerHTML='<circle cx="120" cy="120" r="92" fill="none" stroke="var(--line)" stroke-width="18"/><circle cx="120" cy="120" r="92" fill="none" stroke="var(--gold)" stroke-width="18" stroke-dasharray="'+g+" "+(C0-g)+'"/><circle cx="120" cy="120" r="92" fill="none" stroke="var(--em2)" stroke-width="18" stroke-dasharray="'+e+" "+(C0-e)+'" stroke-dashoffset="'+(-g-gap)+'"/>';
+}
+function pathOf(points,w,h,p,max){
+  if(!points.length)return"";
+  const step=(w-p*2)/Math.max(points.length-1,1);
+  let d="";
+  points.forEach((pt,i)=>{
+    const x=(p+i*step).toFixed(1);
+    const y=(h-p-(pt.bal/max)*(h-p*2)).toFixed(1);
+    d+=(i?" L":"M")+x+" "+y;
+  });
+  return d;
+}
+function drawSpark(off,slide){
+  const svg=$("spark");const w=320,h=200,p=10;
+  const max=Math.max.apply(null,off.concat(slide).map(x=>x.bal))||1;
+  const a=pathOf(off.filter((_,i)=>i%2===0||i===off.length-1),w,h,p,max);
+  const b=pathOf(slide.filter((_,i)=>i%2===0||i===slide.length-1),w,h,p,max);
+  svg.innerHTML='<path d="'+a+'" fill="none" stroke="var(--gold)" stroke-width="1.4" opacity="0.35"/><path d="'+b+'" fill="none" stroke="var(--gold)" stroke-width="2.4"/>';
+}
+function itemHtml(e){
+  const ghost=e.status==="projected";
+  const lab=ghost?"ожидается":(e.kind==="early"?"досрочный":"плановый");
+  const del=(!ghost&&unlocked)?'<button type="button" class="btn btn2" data-del="'+e.id+'" style="margin-top:.5rem;min-height:40px">Удалить</button>':"";
+  return '<li class="'+(ghost?"ghost":"")+'"><p class="date display">'+dayMonth(e.date)+'</p><p>'+lab+" · "+rub(e.amount)+'</p><p class="dim">в проценты '+rub(e.interest)+" · в тело "+rub(e.principal)+"</p>"+del+"</li>";
+}
+function render(){
+  const s=snapshot();
+  $("remaining").textContent=rub(s.rem);
+  $("stickyRem").textContent=rub(s.rem);
+  $("paid").textContent=rub(s.paid);
+  $("split").innerHTML=s.paid>0?"<p class=\"em\">в тело "+rub(s.pPrin)+"</p><p class=\"g\">проценты "+rub(s.pInt)+"</p>":"платежей пока нет";
+  $("nextAmt").textContent=s.rem<=0?"—":rub(C.payment);
+  $("due").textContent=s.nextOn?dueIn(s.nextOn)+", "+dayMonth(s.nextOn).replace(" г.",""):"";
+  $("prog").style.width=Math.max(s.paid?2:0,Math.min(100,(s.pPrin/C.principal)*100))+"%";
+  $("kicker").textContent="Москва · "+dayMonth(today()).replace(" г.","");
+  $("rateLine").textContent="Ставка 15,00% = ЦБ 14,00% + 1";
+  $("closeLine").textContent=s.closeOn?"Закроется около "+monthYear(s.closeOn).toLowerCase()+" — ещё "+s.months+" мес. при ставке 15%":"";
+  if(s.rem<=0)$("nextBox").hidden=true;
+  else{
+    $("nextBox").hidden=false;
+    $("nextDate").textContent=s.nextOn?dayMonth(s.nextOn):"";
+    $("nextDue").textContent=s.nextOn?dueIn(s.nextOn):"";
+    $("donutAmt").textContent=rub(C.payment);
+    $("legInt").textContent=rub(s.nxtI);
+    $("legPrin").textContent=rub(s.nxtP);
+    drawDonut(s.nxtI,s.nxtP);
+  }
+  const cbr=Number($("cbrSlide").value);
+  const proj=snapshotAt(cbr+1);
+  drawSpark(s.points,proj.points);
+  $("chartClose").textContent=proj.stalled?"при этой ставке долг не тает":(proj.closeOn?("закрытие — "+monthYear(proj.closeOn).toLowerCase()+" ("+proj.months+" мес.)"):"");
+  $("slideVal").textContent="ЦБ "+cbr.toFixed(2).replace(".",",")+"%  →  займ "+(cbr+1).toFixed(2).replace(".",",")+"%";
+  $("list").innerHTML=s.posted.map(itemHtml).join("")+s.ghosts.map(itemHtml).join("")||'<li class="dim">Первый платёж '+dayMonth(C.first)+"</li>";
+}
+$("list").addEventListener("click",e=>{
+  const id=e.target.getAttribute&&e.target.getAttribute("data-del");if(!id)return;
+  need(()=>{payments=payments.filter(p=>p.id!==id);saveAll();render()});
+});
+function openGate(then){pending=then;$("gate").hidden=false;$("form").hidden=true;startPin()}
+function need(then){if(unlocked)then();else openGate(then)}
+$("btnPay").onclick=()=>need(()=>openForm("scheduled"));
+$("btnEarly").onclick=()=>need(()=>openForm("early"));
+$("formCancel").onclick=()=>$("form").hidden=true;
+$("pinCancel").onclick=()=>{$("gate").hidden=true;pending=null};
+function openForm(k){
+  kind=k;$("form").hidden=false;$("gate").hidden=true;
+  $("formTitle").textContent=k==="early"?"Досрочный платёж":"Очередной платёж";
+  const s=snapshot();
+  $("date").value=k==="early"?today():(s.nextOn||C.first);
+  $("amount").value=k==="early"?"":String(C.payment);
+  $("payoff").hidden=k!=="early";
+  preview();
+}
+function preview(){
+  const s=snapshot();const date=$("date").value;const amt=Number($("amount").value);
+  if(!date||!(amt>0)){$("preview").textContent="";return}
+  const int=interest(s.rem,s.last,date);
+  const toInt=Math.min(amt,int);const toPrin=Math.round((amt-toInt)*100)/100;
+  $("preview").textContent="Проценты "+rub(toInt)+", в тело "+rub(Math.min(toPrin,s.rem));
+}
+$("date").oninput=preview;$("amount").oninput=preview;
+$("payoff").onclick=()=>{const s=snapshot();const date=$("date").value||today();$("amount").value=String(Math.round(s.rem+interest(s.rem,s.last,date)));preview()};
+$("save").onclick=()=>{
+  const date=$("date").value;const amt=Number($("amount").value);
+  if(!date||!(amt>0))return;
+  payments.push({id:"p-"+Date.now(),date,amount:amt,kind});
+  saveAll();$("form").hidden=true;
+  $("flash").hidden=false;$("flash").textContent="Записано "+rub(amt);
+  setTimeout(()=>$("flash").hidden=true,4000);
+  render();
+};
+let digits="";
+function startPin(){digits="";drawDots();$("pinErr").hidden=true}
+function drawDots(){$("dots").innerHTML=[0,1,2,3,4].map(i=>'<span class="dot'+(i<digits.length?" on":"")+'"></span>').join("")}
+function pushKey(k){
+  if(!k)return;
+  if(k==="←"){digits=digits.slice(0,-1);drawDots();return}
+  if(digits.length>=5)return;
+  digits+=k;drawDots();
+  if(digits.length===5){
+    if(digits===C.pin){unlocked=true;$("gate").hidden=true;const t=pending;pending=null;if(t)t();render()}
+    else{$("pinErr").hidden=false;digits="";setTimeout(drawDots,280)}
+  }
+}
+window.zaemKey=pushKey;
+$("pad").innerHTML=["1","2","3","4","5","6","7","8","9","","0","←"].map(k=>k===""?"<span></span>":'<button type="button" onclick="zaemKey(\''+k+'\')">'+k+"</button>").join("");
+$("cbrSlide").oninput=function(){render()};
+$("copyPhone").onclick=async()=>{try{await navigator.clipboard.writeText(C.phone);$("copyPhone").textContent="Номер скопирован"}catch(e){}};
+$("copyPurpose").onclick=async()=>{try{await navigator.clipboard.writeText(C.purpose);$("copyPurpose").textContent="Назначение скопировано"}catch(e){}};
+$("btnIcs").onclick=()=>{
+  const ics=["BEGIN:VCALENDAR","VERSION:2.0","BEGIN:VEVENT","UID:zaem-monthly","DTSTART;VALUE=DATE:20260925","RRULE:FREQ=MONTHLY;BYMONTHDAY=25","SUMMARY:Семейный заём — 25 000 ₽","DESCRIPTION:Светлане +7 926 228-40-56","END:VEVENT","END:VCALENDAR"].join("\r\n");
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([ics],{type:"text/calendar"}));a.download="semeinyi-zaem.ics";a.click();
+};
+$("faq").innerHTML=[
+  ["Откуда берётся ставка","Ставка по займу всегда равна ключевой ставке Банка России плюс один процентный пункт. Сегодня ключ 14% — значит 15% по договору."],
+  ["Платёж всегда 25 000 ₽","Андрей платит 25 000 рублей не позднее 25-го числа каждого месяца. Сумма не меняется вместе со ставкой — меняется только доля процентов и тела."],
+  ["Срок плавает","Ниже ставка ЦБ — быстрее закроется. Ориентир «97 месяцев» — только при ставке 15% и без досрочки."],
+  ["Сначала проценты, потом долг","В день платежа сначала закрываются проценты за дни с прошлого раза, остаток гасит долг."],
+  ["Можно вернуть раньше","Полностью или частично — в любой день, без комиссии. Ежемесячные 25 000 ₽ сохраняются, срок становится короче."],
+  ["Где смотреть ставку ЦБ","На сайте Банка России: cbr.ru, раздел «Ключевая ставка»."],
+  ["Что важнее — страница или бумага","Юридическую силу имеет бумажный договор от 26 августа 2026 года. Эта страница — наглядное приложение."]
+].map(x=>'<details class="faq"><summary class="display">'+x[0]+"</summary><p>"+x[1]+"</p></details>").join("");
+function setTheme(t){document.documentElement.setAttribute("data-theme",t);localStorage.setItem("zaem-theme",t);$("tDark").className=t==="dark"?"on":"";$("tLight").className=t==="light"?"on":"";document.querySelector("meta[name=theme-color]").setAttribute("content",t==="light"?"#f3ead8":"#0c1410")}
+$("tDark").onclick=()=>setTheme("dark");$("tLight").onclick=()=>setTheme("light");
+setTheme(localStorage.getItem("zaem-theme")==="light"?"light":"dark");
+window.addEventListener("scroll",()=>{$("sticky").classList.toggle("on",window.scrollY>280)},{passive:true});
+load();render();
+</script>
+</body>
+</html>

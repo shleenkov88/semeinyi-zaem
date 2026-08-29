@@ -243,6 +243,17 @@ function load(){
     SEED.forEach(function(p){if(!ids[p.id])payments.push(p)});
   }
 }
+async function pullRemote(){
+  try{
+    const r=await fetch("payments.json?t="+Date.now(),{cache:"no-store"});
+    if(!r.ok)return;
+    const remote=await r.json();
+    if(Array.isArray(remote)&&remote.length){
+      payments=remote;
+      saveAll();
+    }
+  }catch(e){}
+}
 function saveAll(){localStorage.setItem("zaem-pay",JSON.stringify(payments))}
 function snapshotAt(rate){
   let rem=C.principal,last=C.start,paid=0,pInt=0,pPrin=0,posted=[];
@@ -407,7 +418,9 @@ function setTheme(t){document.documentElement.setAttribute("data-theme",t);local
 $("tDark").onclick=()=>setTheme("dark");$("tLight").onclick=()=>setTheme("light");
 setTheme(localStorage.getItem("zaem-theme")==="light"?"light":"dark");
 window.addEventListener("scroll",()=>{$("sticky").classList.toggle("on",window.scrollY>280)},{passive:true});
-load();render();
+load();
+render();
+pullRemote().then(function(){render();});
 </script>
 </body>
 </html>

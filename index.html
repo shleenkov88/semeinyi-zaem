@@ -219,6 +219,7 @@ details.faq p{margin:0 0 1rem;color:var(--muted)}
 </div>
 <script>
 const C={principal:1400000,payment:25000,rate:15,cbr:14,start:"2026-08-26",first:"2026-09-25",pin:"52193",phone:"+7 926 228-40-56",purpose:"Возврат займа и процентов по договору займа от 26.08.2026"};
+function pct(n){return n.toFixed(2).replace(".",",")+"%"}
 const rub=n=>new Intl.NumberFormat("ru-RU",{style:"currency",currency:"RUB",maximumFractionDigits:0}).format(Math.round(n));
 const utc=iso=>{const[y,m,d]=iso.split("-").map(Number);return Date.UTC(y,m-1,d)};
 const days=(a,b)=>Math.round((utc(b)-utc(a))/86400000);
@@ -251,6 +252,20 @@ async function pullRemote(){
     if(Array.isArray(remote)&&remote.length){
       payments=remote;
       saveAll();
+    }
+  }catch(e){}
+}
+async function pullCbr(){
+  try{
+    const r=await fetch("cbr.json?t="+Date.now(),{cache:"no-store"});
+    if(!r.ok)return;
+    const d=await r.json();
+    if(typeof d.rate==="number"){
+      C.cbr=d.rate;
+      C.rate=Math.round((d.rate+1)*100)/100;
+      C.asOf=d.asOf||d.fetchedAt;
+      const slide=$("cbrSlide");
+      if(slide&&!slide.dataset.moved)slide.value=String(d.rate);
     }
   }catch(e){}
 }
@@ -327,8 +342,8 @@ function render(){
   $("due").textContent=s.nextOn?dueIn(s.nextOn)+", "+dayMonth(s.nextOn).replace(" г.",""):"";
   $("prog").style.width=Math.max(s.paid?2:0,Math.min(100,(s.pPrin/C.principal)*100))+"%";
   $("kicker").textContent="Москва · "+dayMonth(today()).replace(" г.","");
-  $("rateLine").textContent="Ставка 15,00% = ЦБ 14,00% + 1";
-  $("closeLine").textContent=s.closeOn?"Закроется около "+monthYear(s.closeOn).toLowerCase()+" — ещё "+s.months+" мес. при ставке 15%":"";
+  $("rateLine").textContent="Ставка "+pct(C.rate)+" = ЦБ "+pct(C.cbr)+" + 1";
+  $("closeLine").textContent=s.closeOn?"Закроется около "+monthYear(s.closeOn).toLowerCase()+" — ещё "+s.months+" мес. при ставке "+pct(C.rate):"";
   if(s.rem<=0)$("nextBox").hidden=true;
   else{
     $("nextBox").hidden=false;
@@ -398,7 +413,7 @@ function pushKey(k){
 }
 window.zaemKey=pushKey;
 $("pad").innerHTML=["1","2","3","4","5","6","7","8","9","","0","←"].map(k=>k===""?"<span></span>":'<button type="button" onclick="zaemKey(\''+k+'\')">'+k+"</button>").join("");
-$("cbrSlide").oninput=function(){render()};
+$("cbrSlide").addEventListener("input",function(){this.dataset.moved="1";render()});
 $("copyPhone").onclick=async()=>{try{await navigator.clipboard.writeText(C.phone);$("copyPhone").textContent="Номер скопирован"}catch(e){}};
 $("copyPurpose").onclick=async()=>{try{await navigator.clipboard.writeText(C.purpose);$("copyPurpose").textContent="Назначение скопировано"}catch(e){}};
 $("btnIcs").onclick=()=>{
@@ -420,7 +435,7 @@ setTheme(localStorage.getItem("zaem-theme")==="light"?"light":"dark");
 window.addEventListener("scroll",()=>{$("sticky").classList.toggle("on",window.scrollY>280)},{passive:true});
 load();
 render();
-pullRemote().then(function(){render();});
+Promise.all([pullRemote(),pullCbr()]).then(function(){render();});
 </script>
 </body>
 </html>

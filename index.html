@@ -234,22 +234,18 @@ function monthYear(iso){return new Intl.DateTimeFormat("ru-RU",{month:"long",yea
 function dueIn(iso){const n=days(today(),iso);if(n===0)return"сегодня";if(n===1)return"завтра";if(n>1)return"через "+n+" дней";return"просрочено на "+(-n)+" дн."}
 const $=id=>document.getElementById(id);
 let payments=[],unlocked=false,pending=null,kind="scheduled";
-var SEED=[{"id":"p-seed-1","date":"2026-09-25","amount":25000,"kind":"scheduled"}];
+var SEED=[];
 
 function load(){
   try{payments=JSON.parse(localStorage.getItem("zaem-pay")||"[]")}catch(e){payments=[]}
   if(!Array.isArray(payments))payments=[];
-  if(SEED&&SEED.length){
-    const ids={};payments.forEach(function(p){ids[p.id]=1});
-    SEED.forEach(function(p){if(!ids[p.id])payments.push(p)});
-  }
 }
 async function pullRemote(){
   try{
     const r=await fetch("payments.json?t="+Date.now(),{cache:"no-store"});
     if(!r.ok)return;
     const remote=await r.json();
-    if(Array.isArray(remote)&&remote.length){
+    if(Array.isArray(remote)){
       payments=remote;
       saveAll();
     }

@@ -151,34 +151,6 @@ details.faq p{margin:0 0 1rem;color:var(--muted)}
     </div>
   </section>
 
-  <div class="row">
-    <button type="button" class="btn" id="btnPay">Очередной</button>
-    <button type="button" class="btn btn2" id="btnEarly">Досрочно</button>
-    <button type="button" class="btn btn2" id="btnIcs">В календарь</button>
-  </div>
-
-  <div id="gate" hidden class="card">
-    <p class="k">Код записи</p>
-    <p>Смотреть можно без кода. Писать — нет.</p>
-    <div class="dots" id="dots"></div>
-    <p class="warn" id="pinErr" hidden>Не тот код</p>
-    <div class="pad" id="pad"></div>
-    <button type="button" class="btn btn2" id="pinCancel" style="margin-top:.8rem;width:100%;max-width:20rem">Отмена</button>
-  </div>
-
-  <div id="form" hidden class="card" style="margin-top:1rem">
-    <p class="k" id="formTitle">Очередной платёж</p>
-    <label>Дата зачисления<input type="date" id="date"></label>
-    <label>Сумма, ₽<input type="number" inputmode="numeric" id="amount" min="1"></label>
-    <p class="dim" id="preview"></p>
-    <div class="row">
-      <button type="button" class="btn" id="save">Записать</button>
-      <button type="button" class="btn btn2" id="payoff" hidden>Закрыть всё</button>
-      <button type="button" class="btn btn2" id="formCancel">Отмена</button>
-    </div>
-  </div>
-  <p id="flash" hidden class="card flash"></p>
-
   <p class="k" style="margin-top:1.8rem">Семейная книга</p>
   <h2 class="display">Лента платежей</h2>
   <ul class="list" id="list"></ul>
@@ -207,6 +179,7 @@ details.faq p{margin:0 0 1rem;color:var(--muted)}
     <div class="row">
       <button type="button" class="btn btn2" id="copyPhone">Скопировать номер</button>
       <button type="button" class="btn btn2" id="copyPurpose">Скопировать назначение</button>
+      <button type="button" class="btn btn2" id="btnIcs">В календарь</button>
     </div>
   </div>
 
@@ -218,7 +191,7 @@ details.faq p{margin:0 0 1rem;color:var(--muted)}
   <p class="hint">Москва · Шлеенкова Светлана Владимировна и Шлеенков Андрей Николаевич.</p>
 </div>
 <script>
-const C={principal:1400000,payment:25000,rate:15,cbr:14,start:"2026-08-26",first:"2026-09-25",pin:"52193",phone:"+7 926 228-40-56",purpose:"Возврат займа и процентов по договору займа от 26.08.2026"};
+const C={principal:1400000,payment:25000,rate:15,cbr:14,start:"2026-08-26",first:"2026-09-25",phone:"+7 926 228-40-56",purpose:"Возврат займа и процентов по договору займа от 26.08.2026"};
 function pct(n){return n.toFixed(2).replace(".",",")+"%"}
 const rub=n=>new Intl.NumberFormat("ru-RU",{style:"currency",currency:"RUB",maximumFractionDigits:0}).format(Math.round(n));
 const utc=iso=>{const[y,m,d]=iso.split("-").map(Number);return Date.UTC(y,m-1,d)};
@@ -233,8 +206,8 @@ function dayMonth(iso){return new Intl.DateTimeFormat("ru-RU",{day:"numeric",mon
 function monthYear(iso){return new Intl.DateTimeFormat("ru-RU",{month:"long",year:"numeric",timeZone:"UTC"}).format(new Date(iso+"T00:00:00Z"))}
 function dueIn(iso){const n=days(today(),iso);if(n===0)return"сегодня";if(n===1)return"завтра";if(n>1)return"через "+n+" дней";return"просрочено на "+(-n)+" дн."}
 const $=id=>document.getElementById(id);
-let payments=[],unlocked=false,pending=null,kind="scheduled";
-var SEED=[{"id":"aa72032a-3842-4a53-971d-1531832996cf","date":"2026-09-25","amount":25000,"kind":"scheduled"}];
+let payments=[],kind="scheduled";
+var SEED=[];
 
 function load(){
   try{payments=JSON.parse(localStorage.getItem("zaem-pay")||"[]")}catch(e){payments=[]}
@@ -325,8 +298,7 @@ function drawSpark(off,slide){
 function itemHtml(e){
   const ghost=e.status==="projected";
   const lab=ghost?"ожидается":(e.kind==="early"?"досрочный":"плановый");
-  const del=(!ghost&&unlocked)?'<button type="button" class="btn btn2" data-del="'+e.id+'" style="margin-top:.5rem;min-height:40px">Удалить</button>':"";
-  return '<li class="'+(ghost?"ghost":"")+'"><p class="date display">'+dayMonth(e.date)+'</p><p>'+lab+" · "+rub(e.amount)+'</p><p class="dim">в проценты '+rub(e.interest)+" · в тело "+rub(e.principal)+"</p>"+del+"</li>";
+  return '<li class="'+(ghost?"ghost":"")+'"><p class="date display">'+dayMonth(e.date)+'</p><p>'+lab+" · "+rub(e.amount)+'</p><p class="dim">в проценты '+rub(e.interest)+" · в тело "+rub(e.principal)+"</p></li>";
 }
 function render(){
   const s=snapshot();
@@ -357,58 +329,6 @@ function render(){
   $("slideVal").textContent="ЦБ "+cbr.toFixed(2).replace(".",",")+"%  →  займ "+(cbr+1).toFixed(2).replace(".",",")+"%";
   $("list").innerHTML=s.posted.map(itemHtml).join("")+s.ghosts.map(itemHtml).join("")||'<li class="dim">Первый платёж '+dayMonth(C.first)+"</li>";
 }
-$("list").addEventListener("click",e=>{
-  const id=e.target.getAttribute&&e.target.getAttribute("data-del");if(!id)return;
-  need(()=>{payments=payments.filter(p=>p.id!==id);saveAll();render()});
-});
-function openGate(then){pending=then;$("gate").hidden=false;$("form").hidden=true;startPin()}
-function need(then){if(unlocked)then();else openGate(then)}
-$("btnPay").onclick=()=>need(()=>openForm("scheduled"));
-$("btnEarly").onclick=()=>need(()=>openForm("early"));
-$("formCancel").onclick=()=>$("form").hidden=true;
-$("pinCancel").onclick=()=>{$("gate").hidden=true;pending=null};
-function openForm(k){
-  kind=k;$("form").hidden=false;$("gate").hidden=true;
-  $("formTitle").textContent=k==="early"?"Досрочный платёж":"Очередной платёж";
-  const s=snapshot();
-  $("date").value=k==="early"?today():(s.nextOn||C.first);
-  $("amount").value=k==="early"?"":String(C.payment);
-  $("payoff").hidden=k!=="early";
-  preview();
-}
-function preview(){
-  const s=snapshot();const date=$("date").value;const amt=Number($("amount").value);
-  if(!date||!(amt>0)){$("preview").textContent="";return}
-  const int=interest(s.rem,s.last,date);
-  const toInt=Math.min(amt,int);const toPrin=Math.round((amt-toInt)*100)/100;
-  $("preview").textContent="Проценты "+rub(toInt)+", в тело "+rub(Math.min(toPrin,s.rem));
-}
-$("date").oninput=preview;$("amount").oninput=preview;
-$("payoff").onclick=()=>{const s=snapshot();const date=$("date").value||today();$("amount").value=String(Math.round(s.rem+interest(s.rem,s.last,date)));preview()};
-$("save").onclick=()=>{
-  const date=$("date").value;const amt=Number($("amount").value);
-  if(!date||!(amt>0))return;
-  payments.push({id:"p-"+Date.now(),date,amount:amt,kind});
-  saveAll();$("form").hidden=true;
-  $("flash").hidden=false;$("flash").textContent="Записано "+rub(amt);
-  setTimeout(()=>$("flash").hidden=true,4000);
-  render();
-};
-let digits="";
-function startPin(){digits="";drawDots();$("pinErr").hidden=true}
-function drawDots(){$("dots").innerHTML=[0,1,2,3,4].map(i=>'<span class="dot'+(i<digits.length?" on":"")+'"></span>').join("")}
-function pushKey(k){
-  if(!k)return;
-  if(k==="←"){digits=digits.slice(0,-1);drawDots();return}
-  if(digits.length>=5)return;
-  digits+=k;drawDots();
-  if(digits.length===5){
-    if(digits===C.pin){unlocked=true;$("gate").hidden=true;const t=pending;pending=null;if(t)t();render()}
-    else{$("pinErr").hidden=false;digits="";setTimeout(drawDots,280)}
-  }
-}
-window.zaemKey=pushKey;
-$("pad").innerHTML=["1","2","3","4","5","6","7","8","9","","0","←"].map(k=>k===""?"<span></span>":'<button type="button" onclick="zaemKey(\''+k+'\')">'+k+"</button>").join("");
 $("cbrSlide").addEventListener("input",function(){this.dataset.moved="1";render()});
 $("copyPhone").onclick=async()=>{try{await navigator.clipboard.writeText(C.phone);$("copyPhone").textContent="Номер скопирован"}catch(e){}};
 $("copyPurpose").onclick=async()=>{try{await navigator.clipboard.writeText(C.purpose);$("copyPurpose").textContent="Назначение скопировано"}catch(e){}};

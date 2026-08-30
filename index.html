@@ -214,29 +214,37 @@ function load(){
   if(!Array.isArray(payments))payments=[];
 }
 async function pullRemote(){
-  try{
-    const r=await fetch("payments.json?t="+Date.now(),{cache:"no-store"});
-    if(!r.ok)return;
-    const remote=await r.json();
-    if(Array.isArray(remote)){
-      payments=remote;
-      saveAll();
-    }
-  }catch(e){}
+  const urls=["https://shleenkov88.github.io/semeinyi-zaem/payments.json","payments.json"];
+  for(const u of urls){
+    try{
+      const r=await fetch(u+(u.includes("?")?"":"?t=")+Date.now(),{cache:"no-store"});
+      if(!r.ok)continue;
+      const remote=await r.json();
+      if(Array.isArray(remote)){
+        payments=remote;
+        saveAll();
+        return;
+      }
+    }catch(e){}
+  }
 }
 async function pullCbr(){
-  try{
-    const r=await fetch("cbr.json?t="+Date.now(),{cache:"no-store"});
-    if(!r.ok)return;
-    const d=await r.json();
-    if(typeof d.rate==="number"){
-      C.cbr=d.rate;
-      C.rate=Math.round((d.rate+1)*100)/100;
-      C.asOf=d.asOf||d.fetchedAt;
-      const slide=$("cbrSlide");
-      if(slide&&!slide.dataset.moved)slide.value=String(d.rate);
-    }
-  }catch(e){}
+  const urls=["https://shleenkov88.github.io/semeinyi-zaem/cbr.json","cbr.json"];
+  for(const u of urls){
+    try{
+      const r=await fetch(u+(u.includes("?")?"":"?t=")+Date.now(),{cache:"no-store"});
+      if(!r.ok)continue;
+      const d=await r.json();
+      if(typeof d.rate==="number"){
+        C.cbr=d.rate;
+        C.rate=Math.round((d.rate+1)*100)/100;
+        C.asOf=d.asOf||d.fetchedAt;
+        const slide=$("cbrSlide");
+        if(slide&&!slide.dataset.moved)slide.value=String(d.rate);
+        return;
+      }
+    }catch(e){}
+  }
 }
 function saveAll(){localStorage.setItem("zaem-pay",JSON.stringify(payments))}
 function snapshotAt(rate){

@@ -1,10 +1,10 @@
 {
   "rate": 14,
   "effectiveFrom": "2026-07-27",
-  "asOf": "2026-09-05",
+  "asOf": "2026-09-06",
   "nextMeeting": "2026-09-11",
   "source": "Банк России",
   "sourceUrl": "https://www.cbr.ru/hd_base/keyrate/",
-  "fetchedAt": "2026-09-05T08:50:21.093Z",
+  "fetchedAt": "2026-09-06T09:10:01.421Z",
   "live": true
 }

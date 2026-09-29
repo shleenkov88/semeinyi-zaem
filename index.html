@@ -1,2 +1,173 @@
 <!DOCTYPE html>
-<!-- see artifacts -->
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Семейный заём</title>
+<link rel="icon" href="favicon.svg"/>
+<style>
+:root{--bg:#0c1410;--elev:#121c17;--fg:#f3ead8;--muted:#c4b496;--dim:#8f8168;--gold:#c4a574;--gold2:#e8d0a4;--em2:#6ea88a;--ink:#07110c;--danger:#d07262;--line:rgb(232 208 164/.14)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,sans-serif;line-height:1.5}
+.wrap{max-width:42rem;margin:0 auto;padding:1rem 1.2rem 4rem}
+.k{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin:0}
+h1{font-family:Georgia,serif;font-weight:500;font-size:2.6rem;margin:.3rem 0}
+.jewel{font-family:Georgia,serif;font-size:2.8rem;color:var(--gold2);margin:.2rem 0}
+.card{background:var(--elev);border-radius:1.2rem;padding:1rem 1.1rem;margin:1rem 0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
+dt{font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+dd{font-size:1.5rem;margin:.4rem 0 0;font-family:Georgia,serif}
+.btn{min-height:46px;border:0;border-radius:999px;padding:.6rem 1rem;background:var(--gold);color:var(--ink);font:inherit}
+.btn2{background:transparent;color:var(--fg);box-shadow:0 0 0 1px var(--line)}
+.row{display:flex;flex-wrap:wrap;gap:.5rem;margin:.8rem 0}
+label{display:block;color:var(--muted);margin:.5rem 0}
+input{width:100%;min-height:46px;border:0;border-radius:.6rem;background:#18241e;color:var(--fg);padding:0 .8rem;font:inherit}
+.dim{color:var(--dim)}.g{color:var(--gold2)}.warn{color:var(--danger)}
+ul.list{list-style:none;padding:0 0 0 1.2rem;border-left:1px solid var(--line)}
+ul.list li{padding:0 0 1rem}
+.admin{display:none}.admin.on{display:block}
+.del{border:0;background:none;color:var(--danger);font:inherit}
+a{color:var(--gold2)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<p class="k">№ 1 · Москва</p>
+<h1>Семейный заём</h1>
+<p class="k">Осталось</p>
+<p class="jewel" id="remaining">—</p>
+<div class="grid">
+  <div class="card"><dt>Внесено</dt><dd id="paid">—</dd></div>
+  <div class="card"><dt>Следующий</dt><dd id="nextAmt">—</dd><p class="g" id="due"></p></div>
+</div>
+<p id="rateLine"></p>
+<p class="dim" id="closeLine"></p>
+<p class="dim">Светлана Владимировна · Андрей Николаевич</p>
+<p class="k">Лента</p>
+<ul class="list" id="list"></ul>
+<div class="card" id="gateBox">
+  <p class="k">Кабинет</p>
+  <label>Пароль <input type="password" id="pin" inputmode="numeric" autocomplete="off"/></label>
+  <div class="row"><button class="btn" id="btnUnlock" type="button">Открыть</button></div>
+  <p class="dim" id="pinErr"></p>
+</div>
+<div class="card admin" id="adminBox">
+  <p class="k">Новый платёж</p>
+  <label>Дата <input type="date" id="payDate"/></label>
+  <label>Сумма ₽ <input type="number" id="payAmt" value="25000"/></label>
+  <div class="row">
+    <button class="btn" id="kSched" type="button">Очередной</button>
+    <button class="btn btn2" id="kEarly" type="button">Досрочно</button>
+  </div>
+  <div class="row">
+    <button class="btn" id="btnAdd" type="button">Записать и отправить</button>
+    <button class="btn btn2" id="btnLock" type="button">Закрыть</button>
+  </div>
+  <label>Токен GitHub <input type="password" id="ghToken" placeholder="github_pat_…"/></label>
+  <div class="row">
+    <button class="btn btn2" id="btnSaveTok" type="button">Сохранить токен</button>
+    <button class="btn btn2" id="btnPub" type="button">Отправить ещё раз</button>
+  </div>
+  <p class="g" id="adminMsg"></p>
+</div>
+<div class="card">
+  <p class="k">Как перевести</p>
+  <p>Шлеенкова Светлана Владимировна</p>
+  <p><a href="tel:+79262284056">+7 926 228-40-56</a> · Т-Банк</p>
+  <p class="dim">Возврат займа и процентов по договору займа от 26.08.2026</p>
+</div>
+</div>
+<script>
+const C={principal:1400000,payment:25000,rate:15,cbr:14,start:"2026-08-26",first:"2026-09-25"};
+const rub=n=>new Intl.NumberFormat("ru-RU",{style:"currency",currency:"RUB",maximumFractionDigits:0}).format(Math.round(n));
+const utc=iso=>{const[y,m,d]=iso.split("-").map(Number);return Date.UTC(y,m-1,d)};
+const days=(a,b)=>Math.round((utc(b)-utc(a))/86400000);
+const today=()=>{const n=new Date();return n.getFullYear()+"-"+String(n.getMonth()+1).padStart(2,"0")+"-"+String(n.getDate()).padStart(2,"0")};
+const leap=y=>(y%4===0&&y%100!==0)||y%400===0;
+const addM=(iso,n)=>{const[y,m,d]=iso.split("-").map(Number);const dt=new Date(Date.UTC(y,m-1+n,1));const Y=dt.getUTCFullYear(),M=dt.getUTCMonth()+1;const dim=new Date(Date.UTC(Y,M,0)).getUTCDate();return Y+"-"+String(M).padStart(2,"0")+"-"+String(Math.min(d,dim)).padStart(2,"0")};
+function next25(iso){const[y,m,d]=iso.split("-").map(Number);if(d<25)return y+"-"+String(m).padStart(2,"0")+"-25";return addM(y+"-"+String(m).padStart(2,"0")+"-01",1).slice(0,8)+"25"}
+function interestAt(rate,bal,start,end){if(bal<=0||utc(end)<=utc(start))return 0;let t=0,cur=start;while(utc(cur)<utc(end)){const y=+cur.slice(0,4),ye=(y+1)+"-01-01",nxt=utc(ye)<utc(end)?ye:end,ds=days(cur,nxt);if(ds<=0)break;t+=bal*(rate/100)*(ds/(leap(y)?366:365));cur=nxt}return Math.round(t*100)/100}
+function dayMonth(iso){return new Intl.DateTimeFormat("ru-RU",{day:"numeric",month:"long",year:"numeric",timeZone:"UTC"}).format(new Date(iso+"T00:00:00Z"))}
+const $=id=>document.getElementById(id);
+let payments=[],kind="scheduled",unlocked=false;
+const PIN_H=1482813072,GH={owner:"shleenkov88",repo:"semeinyi-zaem",path:"payments.json",branch:"main"};
+function hashPin(s){let h=0;for(let i=0;i<s.length;i++)h=((h<<5)-h)+s.charCodeAt(i)|0;return h}
+function b64(str){const u=new TextEncoder().encode(str);let s="";u.forEach(n=>s+=String.fromCharCode(n));return btoa(s)}
+function msg(t){$("adminMsg").textContent=t||""}
+function saveAll(){localStorage.setItem("zaem-pay",JSON.stringify(payments))}
+function snap(){
+  let rem=C.principal,last=C.start,paid=0,posted=[];
+  payments.slice().sort((a,b)=>a.date.localeCompare(b.date)).forEach(p=>{
+    const int=interestAt(C.rate,rem,last,p.date),toInt=Math.min(p.amount,int),prin=Math.min(Math.round((p.amount-toInt)*100)/100,rem);
+    rem=Math.max(0,Math.round((rem-prin)*100)/100);paid+=p.amount;
+    posted.push({id:p.id,date:p.date,amount:p.amount,kind:p.kind,interest:toInt,principal:prin});last=p.date;
+  });
+  const nextOn=rem<=0?null:(payments.length?next25(payments.slice().sort((a,b)=>a.date.localeCompare(b.date)).at(-1).date):C.first);
+  return {rem,paid,posted,nextOn};
+}
+function render(){
+  const s=snap();
+  $("remaining").textContent=rub(s.rem);
+  $("paid").textContent=rub(s.paid);
+  $("nextAmt").textContent=s.rem<=0?"—":rub(C.payment);
+  if(s.nextOn){const n=days(today(),s.nextOn);$("due").textContent=(n<0?"просрочено на "+(-n)+" дн.":n===0?"сегодня":"через "+n+" дн.")+", "+dayMonth(s.nextOn)}
+  else $("due").textContent="";
+  $("rateLine").textContent="Ставка "+C.rate.toFixed(2).replace(".",",")+"% = ЦБ "+C.cbr.toFixed(2).replace(".",",")+"% + 1";
+  $("list").innerHTML=s.posted.map(e=>{
+    const lab=e.kind==="early"?"досрочный":"плановый";
+    const del=unlocked?' <button class="del" data-del="'+e.id+'" type="button">удалить</button>':"";
+    return "<li><b>"+dayMonth(e.date)+"</b><br>"+lab+" · "+rub(e.amount)+del+"<br><span class='dim'>проценты "+rub(e.interest)+" · тело "+rub(e.principal)+"</span></li>";
+  }).join("")||"<li class='dim'>Платежей нет</li>";
+}
+async function pullRemote(){
+  try{
+    const r=await fetch("payments.json?t="+Date.now(),{cache:"no-store"});
+    if(!r.ok)return;
+    const remote=await r.json();
+    if(Array.isArray(remote)){payments=remote;saveAll();render()}
+  }catch(e){}
+}
+async function pullCbr(){
+  try{
+    const r=await fetch("cbr.json?t="+Date.now(),{cache:"no-store"});
+    if(!r.ok)return;
+    const d=await r.json();
+    if(typeof d.rate==="number"){C.cbr=d.rate;C.rate=Math.round((d.rate+1)*100)/100;render()}
+  }catch(e){}
+}
+async function publishPays(){
+  const token=(localStorage.getItem("zaem-gh")||"").trim();
+  if(!token){msg("Платёж записан здесь. Чтобы увидела мама — вставьте токен GitHub.");return}
+  msg("Отправляю…");
+  const headers={Authorization:"Bearer "+token,Accept:"application/vnd.github+json"};
+  const url="https://api.github.com/repos/"+GH.owner+"/"+GH.repo+"/contents/"+GH.path;
+  const get=await fetch(url+"?ref="+GH.branch,{headers});
+  if(!get.ok){msg("Токен не принят ("+get.status+")");return}
+  const meta=await get.json();
+  const put=await fetch(url,{method:"PUT",headers:{...headers,"Content-Type":"application/json"},body:JSON.stringify({message:"Платёж семейного займа",content:b64(JSON.stringify(payments,null,2)+"\n"),sha:meta.sha,branch:GH.branch})});
+  msg(put.ok?"Готово. Через минуту пусть мама обновит страницу.":"Не записалось: "+put.status);
+}
+function setUnlocked(on){
+  unlocked=!!on;
+  $("gateBox").style.display=on?"none":"";
+  $("adminBox").classList.toggle("on",on);
+  if(on){$("payDate").value=$("payDate").value||today();$("ghToken").value=localStorage.getItem("zaem-gh")||""}
+  render();
+}
+$("btnUnlock").onclick=()=>{if(hashPin($("pin").value)===PIN_H){setUnlocked(true);$("pin").value="";$("pinErr").textContent=""}else $("pinErr").textContent="Не тот пароль"};
+$("btnLock").onclick=()=>setUnlocked(false);
+$("kSched").onclick=()=>{kind="scheduled"};
+$("kEarly").onclick=()=>{kind="early"};
+$("btnAdd").onclick=()=>{
+  const date=$("payDate").value,amount=Math.round(Number($("payAmt").value));
+  if(!date||!(amount>0)){msg("Нужны дата и сумма");return}
+  payments.push({id:"p-"+date+"-"+amount+"-"+Date.now().toString(36),date,amount,kind});
+  saveAll();render();publishPays();
+};
+$("btnSaveTok").onclick=()=>{const t=$("ghToken").value.trim();if(t)localStorage.setItem("zaem-gh",t);else localStorage.removeItem("zaem-gh");msg(t?"Токен сохранён в этом браузере":"Токен удалён")};
+$("btnPub").onclick=publishPays;
+$("list").onclick=e=>{const id=e.target.getAttribute&&e.target.getAttribute("data-del");if(!id||!unlocked)return;payments=payments.filter(p=>p.id!==id);saveAll();render();publishPays()};
+render();
+Promise.all([pullRemote(),pullCbr()]);
+</script>
+</body>
+</html>

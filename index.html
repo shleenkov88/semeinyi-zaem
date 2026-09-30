@@ -25,6 +25,10 @@ input{width:100%;min-height:46px;border:0;border-radius:.6rem;background:#18241e
 ul.list{list-style:none;padding:0 0 0 1.2rem;border-left:1px solid var(--line)}
 ul.list li{padding:0 0 1rem}
 .admin{display:none}.admin.on{display:block}
+.gate{display:none;margin:.5rem 0}.gate.on{display:flex;gap:.5rem;align-items:center}.gate input{max-width:9rem;min-height:38px}
+.tiny{font-size:.85rem;margin:1rem 0 .2rem}.tiny a{color:var(--dim)}
+.btn.sm{min-height:38px;padding:.3rem .9rem}.btn.off{background:transparent;color:var(--fg);box-shadow:0 0 0 1px var(--line)}
+details.tok{margin:.6rem 0}details.tok summary{color:var(--dim);cursor:pointer}
 .del{border:0;background:none;color:var(--danger);font:inherit}
 a{color:var(--gold2)}
 </style>
@@ -44,30 +48,33 @@ a{color:var(--gold2)}
 <p class="dim">Светлана Владимировна · Андрей Николаевич</p>
 <p class="k">Лента</p>
 <ul class="list" id="list"></ul>
-<div class="card" id="gateBox">
-  <p class="k">Кабинет</p>
-  <label>Пароль <input type="password" id="pin" inputmode="numeric" autocomplete="off"/></label>
-  <div class="row"><button class="btn" id="btnUnlock" type="button">Открыть</button></div>
-  <p class="dim" id="pinErr"></p>
+<p class="tiny" id="gateBox"><a href="#" id="openCab">Кабинет</a></p>
+<div class="gate" id="gateForm">
+  <input type="password" id="pin" inputmode="numeric" autocomplete="off" placeholder="Пароль"/>
+  <button class="btn sm" id="btnUnlock" type="button">Открыть</button>
+  <span class="dim" id="pinErr"></span>
 </div>
 <div class="card admin" id="adminBox">
   <p class="k">Новый платёж</p>
   <label>Дата <input type="date" id="payDate"/></label>
   <label>Сумма ₽ <input type="number" id="payAmt" value="25000"/></label>
   <div class="row">
-    <button class="btn" id="kSched" type="button">Очередной</button>
-    <button class="btn btn2" id="kEarly" type="button">Досрочно</button>
+    <button class="btn sm" id="kSched" type="button">Очередной</button>
+    <button class="btn sm off" id="kEarly" type="button">Досрочно</button>
   </div>
   <div class="row">
     <button class="btn" id="btnAdd" type="button">Записать и отправить</button>
-    <button class="btn btn2" id="btnLock" type="button">Закрыть</button>
-  </div>
-  <label>Токен GitHub <input type="password" id="ghToken" placeholder="github_pat_…"/></label>
-  <div class="row">
-    <button class="btn btn2" id="btnSaveTok" type="button">Сохранить токен</button>
-    <button class="btn btn2" id="btnPub" type="button">Отправить ещё раз</button>
+    <button class="btn btn2 sm" id="btnLock" type="button">Выйти</button>
   </div>
   <p class="g" id="adminMsg"></p>
+  <details class="tok" id="tokBox">
+    <summary>Токен GitHub</summary>
+    <label><input type="password" id="ghToken" placeholder="github_pat_…"/></label>
+    <div class="row">
+      <button class="btn btn2 sm" id="btnSaveTok" type="button">Сохранить токен</button>
+      <button class="btn btn2 sm" id="btnPub" type="button">Отправить ещё раз</button>
+    </div>
+  </details>
 </div>
 <div class="card">
   <p class="k">Как перевести</p>
@@ -88,7 +95,7 @@ function next25(iso){const[y,m,d]=iso.split("-").map(Number);if(d<25)return y+"-
 function interestAt(rate,bal,start,end){if(bal<=0||utc(end)<=utc(start))return 0;let t=0,cur=start;while(utc(cur)<utc(end)){const y=+cur.slice(0,4),ye=(y+1)+"-01-01",nxt=utc(ye)<utc(end)?ye:end,ds=days(cur,nxt);if(ds<=0)break;t+=bal*(rate/100)*(ds/(leap(y)?366:365));cur=nxt}return Math.round(t*100)/100}
 function dayMonth(iso){return new Intl.DateTimeFormat("ru-RU",{day:"numeric",month:"long",year:"numeric",timeZone:"UTC"}).format(new Date(iso+"T00:00:00Z"))}
 const $=id=>document.getElementById(id);
-let payments=[],kind="scheduled",unlocked=false;
+let payments=[],kind="scheduled",unlocked=false,busy=false;
 const PIN_H=1482813072,GH={owner:"shleenkov88",repo:"semeinyi-zaem",path:"payments.json",branch:"main"};
 function hashPin(s){let h=0;for(let i=0;i<s.length;i++)h=((h<<5)-h)+s.charCodeAt(i)|0;return h}
 function b64(str){const u=new TextEncoder().encode(str);let s="";u.forEach(n=>s+=String.fromCharCode(n));return btoa(s)}
@@ -119,11 +126,18 @@ function render(){
   }).join("")||"<li class='dim'>Платежей нет</li>";
 }
 async function pullRemote(){
+  if(busy)return;
   try{
-    const r=await fetch("payments.json?t="+Date.now(),{cache:"no-store"});
+    const token=(localStorage.getItem("zaem-gh")||"").trim();
+    let r;
+    if(token){
+      r=await fetch("https://api.github.com/repos/"+GH.owner+"/"+GH.repo+"/contents/"+GH.path+"?ref="+GH.branch+"&t="+Date.now(),{cache:"no-store",headers:{Authorization:"Bearer "+token,Accept:"application/vnd.github.raw+json"}});
+      if(!r.ok)r=null;
+    }
+    if(!r)r=await fetch("payments.json?t="+Date.now(),{cache:"no-store"});
     if(!r.ok)return;
     const remote=await r.json();
-    if(Array.isArray(remote)){payments=remote;saveAll();render()}
+    if(Array.isArray(remote)&&!busy){payments=remote;saveAll();render()}
   }catch(e){}
 }
 async function pullCbr(){
@@ -136,27 +150,35 @@ async function pullCbr(){
 }
 async function publishPays(){
   const token=(localStorage.getItem("zaem-gh")||"").trim();
-  if(!token){msg("Платёж записан здесь. Чтобы увидела мама — вставьте токен GitHub.");return}
-  msg("Отправляю…");
-  const headers={Authorization:"Bearer "+token,Accept:"application/vnd.github+json"};
-  const url="https://api.github.com/repos/"+GH.owner+"/"+GH.repo+"/contents/"+GH.path;
-  const get=await fetch(url+"?ref="+GH.branch,{headers});
-  if(!get.ok){msg("Токен не принят ("+get.status+")");return}
-  const meta=await get.json();
-  const put=await fetch(url,{method:"PUT",headers:{...headers,"Content-Type":"application/json"},body:JSON.stringify({message:"Платёж семейного займа",content:b64(JSON.stringify(payments,null,2)+"\n"),sha:meta.sha,branch:GH.branch})});
-  msg(put.ok?"Готово. Через минуту пусть мама обновит страницу.":"Не записалось: "+put.status);
+  if(!token){msg("Платёж записан только здесь. Чтобы увидела мама — сохраните токен GitHub.");$("tokBox").open=true;return false}
+  busy=true;msg("Отправляю…");
+  try{
+    const headers={Authorization:"Bearer "+token,Accept:"application/vnd.github+json"};
+    const url="https://api.github.com/repos/"+GH.owner+"/"+GH.repo+"/contents/"+GH.path;
+    const get=await fetch(url+"?ref="+GH.branch+"&t="+Date.now(),{headers,cache:"no-store"});
+    if(!get.ok){msg("Токен не принят ("+get.status+")");$("tokBox").open=true;return false}
+    const meta=await get.json();
+    const put=await fetch(url,{method:"PUT",headers:{...headers,"Content-Type":"application/json"},body:JSON.stringify({message:"Платёж семейного займа",content:b64(JSON.stringify(payments,null,2)+"\n"),sha:meta.sha,branch:GH.branch})});
+    msg(put.ok?"Готово. Мама увидит изменения примерно через минуту.":"Не записалось: "+put.status);
+    return put.ok;
+  }catch(e){msg("Нет связи, попробуйте ещё раз");return false}
+  finally{busy=false}
 }
 function setUnlocked(on){
   unlocked=!!on;
   $("gateBox").style.display=on?"none":"";
+  $("gateForm").classList.remove("on");
   $("adminBox").classList.toggle("on",on);
-  if(on){$("payDate").value=$("payDate").value||today();$("ghToken").value=localStorage.getItem("zaem-gh")||""}
+  if(on){$("payDate").value=$("payDate").value||today();$("ghToken").value=localStorage.getItem("zaem-gh")||"";$("tokBox").open=!localStorage.getItem("zaem-gh")}
   render();
 }
-$("btnUnlock").onclick=()=>{if(hashPin($("pin").value)===PIN_H){setUnlocked(true);$("pin").value="";$("pinErr").textContent=""}else $("pinErr").textContent="Не тот пароль"};
-$("btnLock").onclick=()=>setUnlocked(false);
-$("kSched").onclick=()=>{kind="scheduled"};
-$("kEarly").onclick=()=>{kind="early"};
+function setKind(k){kind=k;$("kSched").classList.toggle("off",k!=="scheduled");$("kEarly").classList.toggle("off",k!=="early")}
+$("openCab").onclick=e=>{e.preventDefault();$("gateForm").classList.add("on");$("pin").focus()};
+$("pin").onkeydown=e=>{if(e.key==="Enter")$("btnUnlock").click()};
+$("btnUnlock").onclick=()=>{if(hashPin($("pin").value)===PIN_H){localStorage.setItem("zaem-ok","1");setUnlocked(true);$("pin").value="";$("pinErr").textContent=""}else $("pinErr").textContent="Не тот пароль"};
+$("btnLock").onclick=()=>{localStorage.removeItem("zaem-ok");setUnlocked(false)};
+$("kSched").onclick=()=>setKind("scheduled");
+$("kEarly").onclick=()=>setKind("early");
 $("btnAdd").onclick=()=>{
   const date=$("payDate").value,amount=Math.round(Number($("payAmt").value));
   if(!date||!(amount>0)){msg("Нужны дата и сумма");return}
@@ -167,6 +189,7 @@ $("btnSaveTok").onclick=()=>{const t=$("ghToken").value.trim();if(t)localStorage
 $("btnPub").onclick=publishPays;
 $("list").onclick=e=>{const id=e.target.getAttribute&&e.target.getAttribute("data-del");if(!id||!unlocked)return;payments=payments.filter(p=>p.id!==id);saveAll();render();publishPays()};
 render();
+if(localStorage.getItem("zaem-ok")==="1")setUnlocked(true);
 Promise.all([pullRemote(),pullCbr()]);
 </script>
 </body>

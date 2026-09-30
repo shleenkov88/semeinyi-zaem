@@ -16,5 +16,11 @@
     "date": "2026-10-25",
     "amount": 25000,
     "kind": "scheduled"
+  },
+  {
+    "id": "p-2026-10-25-25000-muo4lujv",
+    "date": "2026-10-25",
+    "amount": 25000,
+    "kind": "scheduled"
   }
 ]

@@ -2,152 +2,537 @@
 <html lang="ru" data-theme="dark">
 <head>
 <meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>Семейный заём</title>
-<link rel="icon" href="favicon.svg"/>
+<meta name="description" content="Живая витрина договора займа № 1 от 26 августа 2026 года: платежи Андрея, ставка и остаток долга."/>
+<meta name="theme-color" content="#0c1410"/>
+<meta name="color-scheme" content="dark light"/>
+<meta property="og:title" content="Семейный заём"/>
+<meta property="og:image" content="https://shleenkov88.github.io/semeinyi-zaem/og.jpg"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<link rel="stylesheet" href="styles.css"/>
+<link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"/>
+<link rel="apple-touch-icon" href="apple-touch-icon.png"/>
+<link rel="manifest" href="site.webmanifest"/>
+<meta name="apple-mobile-web-app-title" content="Семейный заём"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
 <style>
-:root{--bg:#0c1410;--elev:#121c17;--fg:#f3ead8;--muted:#c4b496;--dim:#8f8168;--gold:#c4a574;--gold2:#e8d0a4;--em2:#6ea88a;--ink:#07110c;--danger:#d07262;--line:rgb(232 208 164/.14)}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,sans-serif;line-height:1.5}
-.wrap{max-width:42rem;margin:0 auto;padding:1rem 1.2rem 4rem}
-.k{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin:0}
-h1{font-family:Georgia,serif;font-weight:500;font-size:2.6rem;margin:.3rem 0}
-.jewel{font-family:Georgia,serif;font-size:2.8rem;color:var(--gold2);margin:.2rem 0}
-.card{background:var(--elev);border-radius:1.2rem;padding:1rem 1.1rem;margin:1rem 0}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
-dt{font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
-dd{font-size:1.5rem;margin:.4rem 0 0;font-family:Georgia,serif}
-.btn{min-height:46px;border:0;border-radius:999px;padding:.6rem 1rem;background:var(--gold);color:var(--ink);font:inherit}
-.btn2{background:transparent;color:var(--fg);box-shadow:0 0 0 1px var(--line)}
-.row{display:flex;flex-wrap:wrap;gap:.5rem;margin:.8rem 0}
-label{display:block;color:var(--muted);margin:.5rem 0}
-input{width:100%;min-height:46px;border:0;border-radius:.6rem;background:#18241e;color:var(--fg);padding:0 .8rem;font:inherit}
-.dim{color:var(--dim)}.g{color:var(--gold2)}.warn{color:var(--danger)}
-ul.list{list-style:none;padding:0 0 0 1.2rem;border-left:1px solid var(--line)}
-ul.list li{padding:0 0 1rem}
-.admin{display:none}.admin.on{display:block}
-.gate{display:none;margin:.5rem 0}.gate.on{display:flex;gap:.5rem;align-items:center}.gate input{max-width:9rem;min-height:38px}
-.tiny{font-size:.85rem;margin:1rem 0 .2rem}.tiny a{color:var(--dim)}
-.btn.sm{min-height:38px;padding:.3rem .9rem}.btn.off{background:transparent;color:var(--fg);box-shadow:0 0 0 1px var(--line)}
-details.tok{margin:.6rem 0}details.tok summary{color:var(--dim);cursor:pointer}
-.del{border:0;background:none;color:var(--danger);font:inherit}
-a{color:var(--gold2)}
+html,body{margin:0;min-height:100%;background:#0c1410;color:#f3ead8}
+summary{list-style:none}summary::-webkit-details-marker{display:none}
+ol,ul{list-style:none;padding-left:0}
+html[data-theme=paper],html[data-theme=paper] body{background:#f3ead8;color:#1a2e24}
+.cab-link{background:none;border:0;padding:0;font:inherit;color:inherit;text-decoration:underline;text-underline-offset:3px;cursor:pointer;opacity:.8}
+.cab-gate{display:none;align-items:center;gap:.5rem;margin-top:.75rem;flex-wrap:wrap}
+.cab-gate.on{display:flex}
+.cab-in{min-height:2.75rem;width:100%;border:0;border-radius:.5rem;background:var(--color-bg-subtle);color:var(--color-fg);padding:0 .75rem;font:inherit;font-size:1rem;box-sizing:border-box}
+.cab-gate .cab-in{width:9rem}
+.cab-box{display:none;margin-top:1rem;max-width:36rem;border-radius:.75rem;background:var(--color-bg-elevated);padding:1.25rem;box-shadow:var(--shadow-card)}
+.cab-box.on{display:block}
+.cab-grid{display:grid;gap:.75rem;grid-template-columns:1fr 1fr}
+.cab-grid label{font-size:.875rem;color:var(--color-fg-muted)}
+.cab-grid label .cab-in{margin-top:.25rem;display:block}
+.cab-row{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.75rem;align-items:center}
+.cab-btn{min-height:2.75rem;border:0;border-radius:999px;padding:.5rem 1.1rem;font:inherit;font-size:.875rem;font-weight:500;cursor:pointer;background:var(--color-gold);color:var(--color-ink);box-shadow:0 0 0 1px color-mix(in oklab,var(--color-gold) 70%,transparent)}
+.cab-btn.ghost{background:transparent;color:var(--color-fg);box-shadow:0 0 0 1px var(--color-line-strong)}
+.cab-btn:disabled{opacity:.5;cursor:not-allowed}
+.cab-msg{margin:.75rem 0 0;font-size:.875rem;color:var(--color-gold-bright);min-height:1.2em}
+.cab-err{font-size:.875rem;color:var(--color-danger)}
+.cab-tok summary{cursor:pointer;font-size:.875rem;color:var(--color-fg-subtle);margin-top:.75rem}
+.cab-tok[open] summary{margin-bottom:.5rem}
+.cab-del{background:none;border:0;padding:0;font:inherit;cursor:pointer}
+#chartbox svg{display:block;overflow:visible}
+#chartbox{position:relative}
+.ctip{position:absolute;top:0;pointer-events:none;z-index:5;white-space:nowrap}
+@media (max-width:420px){.cab-grid{grid-template-columns:1fr}}
 </style>
+<script>(function(){try{var t=localStorage.getItem("family-loan-theme");if(t==="paper"||t==="dark")document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
-<body>
-<div class="wrap">
-<p class="k">№ 1 · Москва</p>
-<h1>Семейный заём</h1>
-<p class="k">Осталось</p>
-<p class="jewel" id="remaining">—</p>
-<div class="grid">
-  <div class="card"><dt>Внесено</dt><dd id="paid">—</dd></div>
-  <div class="card"><dt>Следующий</dt><dd id="nextAmt">—</dd><p class="g" id="due"></p></div>
+<body class="antialiased">
+<div class="min-h-dvh bg-bg text-fg">
+<div id="stick" class="fixed inset-x-0 top-0 z-40 border-b border-line bg-bg/92 px-4 py-2.5 backdrop-blur-md" hidden><div class="mx-auto flex max-w-6xl items-center justify-between gap-3 text-sm"><p class="truncate font-display text-base text-fg">Семейный заём</p><p class="tabular text-fg-muted"><span class="text-fg-subtle">внесено </span><span class="text-gold-bright" id="stPaid"></span><span class="mx-2 text-line-strong">·</span><span class="text-fg-subtle">осталось </span><span class="text-fg" id="stRem"></span></p></div></div>
+<div class="relative z-20 flex items-center justify-between px-5 py-4 sm:px-8"><p class="font-display text-lg tracking-wide text-gold">№ 1</p><label for="theme-paper" class="relative z-20 inline-flex min-h-11 min-w-11 cursor-pointer items-center gap-2 rounded-full px-3.5 text-sm text-fg-muted shadow-[0_0_0_1px_var(--color-line)] active:bg-bg-subtle"><input id="theme-paper" type="checkbox" class="peer sr-only"/><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun-medium size-4 peer-checked:hidden" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 3v1"></path><path d="M12 20v1"></path><path d="M3 12h1"></path><path d="M20 12h1"></path><path d="m18.364 5.636-.707.707"></path><path d="m6.343 17.657-.707.707"></path><path d="m5.636 5.636.707.707"></path><path d="m17.657 17.657.707.707"></path></svg><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon-star hidden size-4 peer-checked:block" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9"></path><path d="M20 3v4"></path><path d="M22 5h-4"></path></svg><span class="peer-checked:hidden">Светлая</span><span class="hidden peer-checked:inline">Тёмная</span></label></div>
+<main>
+<header class="relative overflow-hidden px-5 pb-6 pt-3 sm:px-8 sm:pb-14 sm:pt-8"><div class="pointer-events-none absolute inset-0" style="background:var(--hero-wash);pointer-events:none" aria-hidden="true"></div><div class="relative mx-auto max-w-6xl"><div>
+<div class="reveal"><div class="flex items-center justify-between gap-4"><div><p class="text-[0.7rem] font-medium uppercase tracking-[0.2em] text-gold">Москва · <span id="today"></span></p><h1 class="mt-2 font-display text-[clamp(2.2rem,7.4vw,4.2rem)] font-medium tracking-[-0.04em] text-fg">Семейный заём</h1></div><svg viewBox="0 0 240 240" class="size-[4.6rem] shrink-0 text-gold sm:size-24" aria-hidden="true"><circle cx="120" cy="120" r="114" fill="none" stroke="currentColor" stroke-width="0.6" opacity="0.35"></circle><circle cx="120" cy="120" r="108" fill="none" stroke="currentColor" stroke-width="1.15" opacity="0.95"></circle><circle cx="120" cy="120" r="102" fill="none" stroke="currentColor" stroke-width="0.4" opacity="0.4"></circle><circle cx="120" cy="120" r="80" fill="none" stroke="currentColor" stroke-width="0.55" opacity="0.7"></circle><path d="M120 26 A94 94 0 0 1 214 120" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" opacity="0.9"></path><path d="M120 214 A94 94 0 0 1 26 120" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" opacity="0.45"></path><circle cx="120" cy="12" r="1.6" fill="currentColor" opacity="0.85"></circle><circle cx="228" cy="120" r="1.6" fill="currentColor" opacity="0.85"></circle><circle cx="120" cy="228" r="1.6" fill="currentColor" opacity="0.85"></circle><circle cx="12" cy="120.00000000000001" r="1.6" fill="currentColor" opacity="0.85"></circle><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path stroke-width="2.8" d="M82 78 H98"></path><path stroke-width="2.8" d="M112 72 H128"></path><path stroke-width="2.8" d="M142 78 H158"></path><path stroke-width="3.6" d="M90 78 V150"></path><path stroke-width="3.6" d="M120 72 V150"></path><path stroke-width="3.6" d="M150 78 V150"></path><path stroke-width="4.4" d="M78 150 H162"></path></g></svg></div></div>
+<div class="reveal mt-8 sm:mt-10"><p class="text-[0.7rem] uppercase tracking-[0.2em] text-fg-subtle">Осталось</p><p class="jewel mt-1 text-[clamp(2.8rem,11vw,5.6rem)] text-gold-bright"><span class="tabular count-up" id="remaining">&nbsp;</span></p><div class="mt-5 max-w-md" aria-hidden="true"><div class="h-1 overflow-hidden rounded-full bg-bg-subtle"><div class="h-full bg-gold" id="bar" style="width:0%"></div></div></div></div>
+<div class="reveal"><dl class="mt-8 grid grid-cols-2 gap-3 max-w-lg"><div class="rounded-xl bg-bg-elevated px-4 py-4 sm:px-5 sm:py-5"><dt class="text-[0.7rem] uppercase tracking-[0.16em] text-fg-subtle">Внесено</dt><dd class="mt-2 font-display text-[1.65rem] leading-none tabular text-fg sm:text-4xl" id="paid">—</dd><div id="paidSub"></div></div><div class="rounded-xl bg-bg-elevated px-4 py-4 sm:px-5 sm:py-5"><dt class="text-[0.7rem] uppercase tracking-[0.16em] text-fg-subtle">Следующий</dt><dd class="mt-2 font-display text-[1.65rem] leading-none tabular text-fg sm:text-4xl" id="nextAmt">—</dd><div id="nextSub"></div></div></dl><p class="mt-5 max-w-lg text-base text-fg-muted" id="rateLine">Ставка — = ЦБ — + 1</p><a href="https://www.cbr.ru/hd_base/keyrate/" id="cbrLink" target="_blank" rel="noreferrer" class="mt-1 inline-flex min-h-11 items-center text-base text-gold underline decoration-gold/40 underline-offset-4">Ключевая ставка ЦБ, cbr.ru</a></div>
+</div></div></header>
+
+<section class="px-5 py-8 sm:px-8" aria-labelledby="donut-heading"><div class="reveal"><div class="mx-auto max-w-6xl rounded-xl bg-bg-elevated p-6 shadow-[var(--shadow-card)] sm:p-10"><div class="grid items-center gap-10 lg:grid-cols-[auto_1fr]"><div class="mx-auto w-[min(100%,280px)]"><div class="relative aspect-square"><svg viewBox="0 0 240 240" class="-rotate-90" role="img" aria-labelledby="donut-heading"><title id="donut-heading">Состав очередного платежа</title><circle cx="120" cy="120" r="92" fill="none" stroke="var(--color-line)" stroke-width="18"></circle><circle class="donut-arc" id="arcI" cx="120" cy="120" r="92" fill="none" stroke="var(--color-gold)" stroke-width="18" stroke-linecap="butt" stroke-dasharray="0 578" stroke-dashoffset="0" style="transition:stroke-dasharray 750ms var(--ease-out)"></circle><circle class="donut-arc" id="arcP" cx="120" cy="120" r="92" fill="none" stroke="var(--color-emerald-bright)" stroke-width="18" stroke-linecap="butt" stroke-dasharray="0 578" stroke-dashoffset="0" style="transition:stroke-dasharray 750ms var(--ease-out), stroke-dashoffset 750ms var(--ease-out)"></circle></svg><div class="pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center"><p class="font-display text-3xl tabular text-fg" id="dnAmt">—</p><p class="mt-1 text-xs uppercase tracking-[0.16em] text-fg-subtle" id="dnCap">следующий</p></div></div><p class="mt-4 flex items-center justify-center gap-5 text-sm text-fg-muted" id="dnLegend"><span class="inline-flex items-center gap-2"><span class="size-2.5 rounded-full bg-gold"></span>проценты</span><span class="inline-flex items-center gap-2"><span class="size-2.5 rounded-full bg-emerald-bright"></span>в долг</span></p></div><div id="dnText"></div></div></div></div></section>
+
+<section class="px-5 py-8 sm:px-8" aria-labelledby="ledger-heading"><div class="reveal"><div class="mx-auto max-w-6xl">
+<div class="mb-6 flex flex-wrap items-end justify-between gap-3"><div><p class="text-[0.7rem] uppercase tracking-[0.22em] text-gold">Семейная книга</p><h2 id="ledger-heading" class="mt-2 font-display text-3xl text-fg sm:text-4xl">Лента платежей</h2></div></div>
+<div class="mb-6 flex flex-wrap gap-2" id="ledBtns"><button type="button" id="btnSched" class="inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium tracking-wide transition-[transform,background-color,color,box-shadow,opacity] duration-150 ease-out enabled:active:scale-[0.96] disabled:cursor-not-allowed disabled:opacity-50 bg-gold text-ink shadow-[0_0_0_1px_color-mix(in_oklab,var(--color-gold)_70%,transparent)]"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus size-4" aria-hidden="true"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>Очередной</button><button type="button" id="btnEarly" class="inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium tracking-wide transition-[transform,background-color,color,box-shadow,opacity] duration-150 ease-out enabled:active:scale-[0.96] disabled:cursor-not-allowed disabled:opacity-50 bg-transparent text-fg shadow-[0_0_0_1px_var(--color-line-strong)]"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-zap size-4" aria-hidden="true"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path></svg>Досрочно</button></div>
+<p class="mb-6 rounded-lg bg-bg-elevated px-5 py-4 text-base leading-relaxed text-fg shadow-[0_0_0_1px_color-mix(in_oklab,var(--color-gold)_40%,transparent)]" id="flash" hidden></p>
+<div id="firstNote"></div>
+<ol class="relative list-none border-l border-line pl-6 sm:pl-8" id="ledger"></ol>
+<aside class="mt-10 rounded-lg bg-bg-elevated p-5 sm:p-6"><p class="text-[0.7rem] uppercase tracking-[0.18em] text-fg-subtle">Как перевести</p><p class="mt-2 font-display text-xl text-fg">Шлеенкова Светлана Владимировна</p><p class="mt-1 text-fg-muted">Т-Банк по номеру телефона <a href="tel:+79262284056" class="text-gold-bright underline-offset-2 underline">+7 926 228-40-56</a></p><p class="mt-3 text-sm text-fg-subtle">Назначение: «Возврат займа и процентов по договору займа от 26.08.2026»</p>
+<button type="button" id="btnShare" class="inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium tracking-wide transition-[transform,background-color,color,box-shadow,opacity] duration-150 ease-out enabled:active:scale-[0.96] disabled:cursor-not-allowed disabled:opacity-50 bg-gold text-ink shadow-[0_0_0_1px_color-mix(in_oklab,var(--color-gold)_70%,transparent)] mt-5 w-full"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-share2 lucide-share-2 size-4" aria-hidden="true"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"></line><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"></line></svg>Отправить маме</button>
+<p class="mt-3 text-sm text-gold-bright" id="shareMsg" hidden></p>
+<div class="mt-4" id="shareBox" hidden><img id="shareImg" alt="Снимок для мамы" class="w-full rounded-xl"/><button type="button" id="shareHide" class="mt-3 inline-flex min-h-11 w-full items-center justify-center rounded-full text-sm text-fg-muted shadow-[0_0_0_1px_var(--color-line)]">Свернуть снимок</button></div>
+<button type="button" id="shareShow" hidden class="mt-3 inline-flex min-h-11 w-full items-center justify-center rounded-full text-sm text-gold shadow-[0_0_0_1px_var(--color-line)]">Показать снимок</button>
+<div class="mt-4 flex flex-wrap gap-2"><button type="button" id="btnCopyPhone" class="inline-flex min-h-11 items-center gap-2 rounded-full px-3 text-sm text-gold shadow-[0_0_0_1px_var(--color-line)]"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-4" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span>Скопировать номер</span></button><button type="button" id="btnCopyPurpose" class="inline-flex min-h-11 items-center gap-2 rounded-full px-3 text-sm text-fg-muted shadow-[0_0_0_1px_var(--color-line)]"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy size-4" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg><span>Скопировать назначение</span></button><button type="button" id="btnIcs" class="inline-flex min-h-11 items-center gap-2 rounded-full px-3 text-sm text-fg-muted shadow-[0_0_0_1px_var(--color-line)]"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-plus size-4" aria-hidden="true"><path d="M16 19h6"></path><path d="M16 2v4"></path><path d="M19 16v6"></path><path d="M21 12.598V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8.5"></path><path d="M3 10h18"></path><path d="M8 2v4"></path></svg>В календарь</button></div></aside>
+</div></div></section>
+
+<section class="px-5 py-6 sm:px-8" aria-labelledby="chart-heading"><div class="mx-auto max-w-6xl"><details id="chartDet" class="group overflow-hidden rounded-xl bg-bg-elevated shadow-[var(--shadow-card)]"><summary class="flex min-h-14 cursor-pointer list-none items-center justify-between gap-3 rounded-xl px-5 py-4 group-open:rounded-b-none sm:px-8"><div><p class="text-[0.7rem] uppercase tracking-[0.22em] text-gold">Если ставка ЦБ изменится</p><h2 id="chart-heading" class="mt-1 font-display text-xl text-fg sm:text-2xl">График остатка</h2></div><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down size-5 shrink-0 text-fg-subtle transition-transform duration-200 group-open:rotate-180" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></summary><div class="px-5 pb-6 sm:px-8 sm:pb-8"><p class="max-w-2xl text-sm leading-relaxed text-fg-muted" id="chDesc"></p><label class="mt-8 block"><span class="flex items-baseline justify-between gap-3 text-sm text-fg-muted"><span>Ставка ЦБ для расчёта</span><span class="font-display text-2xl tabular text-fg"><span id="slVal">14,00%</span><span class="ml-2 text-base text-fg-subtle">→ займ <span id="slLoan">15,00%</span></span></span></span><input type="range" min="8" max="21" step="0.25" id="slider" class="mt-4 h-11 w-full cursor-pointer accent-[var(--color-gold)]" aria-valuemin="8" aria-valuemax="21" aria-valuenow="14" aria-label="Ключевая ставка ЦБ для графика" value="14"/><span class="mt-1 flex justify-between text-xs text-fg-subtle"><span>8%</span><span>14%</span><span>21%</span></span></label><p class="mt-2 text-sm text-gold-bright" id="slClose"></p><div class="mt-6 h-[280px] w-full sm:h-[340px]" id="chartbox"></div><p class="mt-6 max-w-3xl text-sm leading-relaxed text-fg-muted" id="chFoot"></p></div></details></div></section>
+
+<section class="px-5 py-8 sm:px-8" aria-labelledby="rules-heading"><div class="reveal"><div class="mx-auto max-w-3xl"><p class="text-[0.7rem] uppercase tracking-[0.22em] text-gold">Простыми словами</p><h2 id="rules-heading" class="mt-2 font-display text-3xl text-fg sm:text-4xl">Как устроен заём</h2><div class="mt-8 divide-y divide-line"><details class="group py-2"><summary class="flex min-h-14 w-full cursor-pointer items-center justify-between gap-4 py-2 text-left font-display text-xl text-fg sm:text-2xl">Откуда берётся ставка<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down size-5 shrink-0 text-gold transition-transform duration-200 ease-out group-open:rotate-180" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></summary><p class="pb-4 text-base leading-relaxed text-fg-muted">Ставка по займу всегда равна ключевой ставке Банка России плюс один процентный пункт. Сегодня ключ 14% — значит 15% по договору. Когда ЦБ меняет ключ, новая ставка по займу включается с 1-го числа следующего месяца (или сразу, если решение ЦБ вступило в силу 1-го).</p></details><details class="group py-2"><summary class="flex min-h-14 w-full cursor-pointer items-center justify-between gap-4 py-2 text-left font-display text-xl text-fg sm:text-2xl">Платёж всегда 25 000 ₽<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down size-5 shrink-0 text-gold transition-transform duration-200 ease-out group-open:rotate-180" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></summary><p class="pb-4 text-base leading-relaxed text-fg-muted">Андрей платит 25 000 рублей не позднее 25-го числа каждого месяца. Эта сумма не растёт и не падает вместе со ставкой. Меняется только то, какая часть уходит в проценты, а какая гасит долг. Последний платёж может быть меньше — ровно столько, сколько останется.</p></details><details class="group py-2"><summary class="flex min-h-14 w-full cursor-pointer items-center justify-between gap-4 py-2 text-left font-display text-xl text-fg sm:text-2xl">Срок плавает<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down size-5 shrink-0 text-gold transition-transform duration-200 ease-out group-open:rotate-180" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></summary><p class="pb-4 text-base leading-relaxed text-fg-muted">Если ЦБ снижает ставку, большая доля платежа идёт в тело долга — заём закрывается быстрее. Если повышает, в проценты уходит больше, и срок растягивается. Ориентир «97 месяцев» — только при ставке 15% и без досрочки.</p></details><details class="group py-2"><summary class="flex min-h-14 w-full cursor-pointer items-center justify-between gap-4 py-2 text-left font-display text-xl text-fg sm:text-2xl">Сначала проценты, потом долг<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down size-5 shrink-0 text-gold transition-transform duration-200 ease-out group-open:rotate-180" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></summary><p class="pb-4 text-base leading-relaxed text-fg-muted">За каждый день на остаток долга капают проценты (как в договоре: факт/факт, 365 или 366 дней в году). В день платежа сначала закрываются эти проценты, остаток суммы уменьшает сам долг.</p></details><details class="group py-2"><summary class="flex min-h-14 w-full cursor-pointer items-center justify-between gap-4 py-2 text-left font-display text-xl text-fg sm:text-2xl">Можно вернуть раньше<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down size-5 shrink-0 text-gold transition-transform duration-200 ease-out group-open:rotate-180" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></summary><p class="pb-4 text-base leading-relaxed text-fg-muted">Полностью или частично — в любой день, без комиссии и без штрафа. Если вернуть часть раньше, ежемесячные 25 000 ₽ сохраняются, а срок становится короче.</p></details><details class="group py-2"><summary class="flex min-h-14 w-full cursor-pointer items-center justify-between gap-4 py-2 text-left font-display text-xl text-fg sm:text-2xl">Где смотреть ставку ЦБ<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down size-5 shrink-0 text-gold transition-transform duration-200 ease-out group-open:rotate-180" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></summary><p class="pb-4 text-base leading-relaxed text-fg-muted">На сайте Банка России: cbr.ru, раздел «Ключевая ставка». Эта страница подтягивает её оттуда при каждом визите и помнит последнее известное значение, если сайт ЦБ вдруг не ответит.</p></details><details class="group py-2"><summary class="flex min-h-14 w-full cursor-pointer items-center justify-between gap-4 py-2 text-left font-display text-xl text-fg sm:text-2xl">Что важнее — страница или бумага<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down size-5 shrink-0 text-gold transition-transform duration-200 ease-out group-open:rotate-180" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></summary><p class="pb-4 text-base leading-relaxed text-fg-muted">Юридическую силу имеет бумажный договор от 26 августа 2026 года. Эта страница — наглядное приложение, чтобы было спокойно видно: деньги идут, долг тает, процент честный.</p></details></div></div></div></section>
+</main>
+<footer class="px-5 pb-16 pt-8 sm:px-8"><div class="mx-auto max-w-6xl"><div class="gold-rule mb-8" aria-hidden="true"></div><p class="max-w-2xl text-sm leading-relaxed text-fg-muted">Это наглядное приложение к договору займа № 1 от 26 августа 2026 г.. Юридическую силу имеет бумажный договор.</p><p class="mt-4 text-xs text-fg-subtle">Москва · Шлеенкова Светлана Владимировна и Шлеенков Андрей Николаевич</p>
+<p class="mt-6 text-xs text-fg-subtle" id="gateBox"><button type="button" class="cab-link" id="openCab">Кабинет</button></p>
+<div class="cab-gate" id="gateForm"><input type="password" class="cab-in" id="pin" inputmode="numeric" autocomplete="off" placeholder="Пароль" aria-label="Пароль"/><button type="button" class="cab-btn" id="btnUnlock">Открыть</button><span class="cab-err" id="pinErr"></span></div>
+<div class="cab-box" id="adminBox">
+<p class="text-[0.7rem] uppercase tracking-[0.18em] text-gold" id="formTitle">Новый платёж</p>
+<div class="cab-grid" style="margin-top:.75rem"><label>Дата зачисления<input type="date" class="cab-in" id="payDate"/></label><label>Сумма, ₽<input type="number" inputmode="numeric" min="1" class="cab-in" id="payAmt" value="25000"/></label></div>
+<div class="cab-row"><button type="button" class="cab-btn" id="kSched">Очередной</button><button type="button" class="cab-btn ghost" id="kEarly">Досрочно</button></div>
+<p class="mt-3 text-sm leading-relaxed text-fg-subtle" id="payHint"></p>
+<div class="cab-row"><button type="button" class="cab-btn" id="btnAdd">Записать и отправить</button><button type="button" class="cab-btn ghost" id="btnLock">Выйти</button></div>
+<p class="cab-msg" id="adminMsg"></p>
+<details class="cab-tok" id="tokBox"><summary>Токен GitHub</summary><input type="password" class="cab-in" id="ghToken" placeholder="github_pat_…" autocomplete="off" aria-label="Токен GitHub"/><div class="cab-row"><button type="button" class="cab-btn ghost" id="btnSaveTok">Сохранить токен</button><button type="button" class="cab-btn ghost" id="btnPub">Отправить ещё раз</button></div></details>
 </div>
-<p id="rateLine"></p>
-<p class="dim" id="closeLine"></p>
-<p class="dim">Светлана Владимировна · Андрей Николаевич</p>
-<p class="k">Лента</p>
-<ul class="list" id="list"></ul>
-<p class="tiny" id="gateBox"><a href="#" id="openCab">Кабинет</a></p>
-<div class="gate" id="gateForm">
-  <input type="password" id="pin" inputmode="numeric" autocomplete="off" placeholder="Пароль"/>
-  <button class="btn sm" id="btnUnlock" type="button">Открыть</button>
-  <span class="dim" id="pinErr"></span>
-</div>
-<div class="card admin" id="adminBox">
-  <p class="k">Новый платёж</p>
-  <label>Дата <input type="date" id="payDate"/></label>
-  <label>Сумма ₽ <input type="number" id="payAmt" value="25000"/></label>
-  <div class="row">
-    <button class="btn sm" id="kSched" type="button">Очередной</button>
-    <button class="btn sm off" id="kEarly" type="button">Досрочно</button>
-  </div>
-  <div class="row">
-    <button class="btn" id="btnAdd" type="button">Записать и отправить</button>
-    <button class="btn btn2 sm" id="btnLock" type="button">Выйти</button>
-  </div>
-  <p class="g" id="adminMsg"></p>
-  <details class="tok" id="tokBox">
-    <summary>Токен GitHub</summary>
-    <label><input type="password" id="ghToken" placeholder="github_pat_…"/></label>
-    <div class="row">
-      <button class="btn btn2 sm" id="btnSaveTok" type="button">Сохранить токен</button>
-      <button class="btn btn2 sm" id="btnPub" type="button">Отправить ещё раз</button>
-    </div>
-  </details>
-</div>
-<div class="card">
-  <p class="k">Как перевести</p>
-  <p>Шлеенкова Светлана Владимировна</p>
-  <p><a href="tel:+79262284056">+7 926 228-40-56</a> · Т-Банк</p>
-  <p class="dim">Возврат займа и процентов по договору займа от 26.08.2026</p>
-</div>
+</div></footer>
 </div>
 <script>
-const C={principal:1400000,payment:25000,rate:15,cbr:14,start:"2026-08-26",first:"2026-09-25"};
-const rub=n=>new Intl.NumberFormat("ru-RU",{style:"currency",currency:"RUB",maximumFractionDigits:0}).format(Math.round(n));
-const utc=iso=>{const[y,m,d]=iso.split("-").map(Number);return Date.UTC(y,m-1,d)};
-const days=(a,b)=>Math.round((utc(b)-utc(a))/86400000);
-const today=()=>{const n=new Date();return n.getFullYear()+"-"+String(n.getMonth()+1).padStart(2,"0")+"-"+String(n.getDate()).padStart(2,"0")};
-const leap=y=>(y%4===0&&y%100!==0)||y%400===0;
-const addM=(iso,n)=>{const[y,m,d]=iso.split("-").map(Number);const dt=new Date(Date.UTC(y,m-1+n,1));const Y=dt.getUTCFullYear(),M=dt.getUTCMonth()+1;const dim=new Date(Date.UTC(Y,M,0)).getUTCDate();return Y+"-"+String(M).padStart(2,"0")+"-"+String(Math.min(d,dim)).padStart(2,"0")};
-function next25(iso){const[y,m,d]=iso.split("-").map(Number);if(d<25)return y+"-"+String(m).padStart(2,"0")+"-25";return addM(y+"-"+String(m).padStart(2,"0")+"-01",1).slice(0,8)+"25"}
-function interestAt(rate,bal,start,end){if(bal<=0||utc(end)<=utc(start))return 0;let t=0,cur=start;while(utc(cur)<utc(end)){const y=+cur.slice(0,4),ye=(y+1)+"-01-01",nxt=utc(ye)<utc(end)?ye:end,ds=days(cur,nxt);if(ds<=0)break;t+=bal*(rate/100)*(ds/(leap(y)?366:365));cur=nxt}return Math.round(t*100)/100}
-function dayMonth(iso){return new Intl.DateTimeFormat("ru-RU",{day:"numeric",month:"long",year:"numeric",timeZone:"UTC"}).format(new Date(iso+"T00:00:00Z"))}
+"use strict";
+/* ===== Договор и расчёты (порт логики полного сайта) ===== */
+const M0={principal:1400000,monthlyPayment:25000,paymentDay:25,firstPaymentOn:"2026-09-25",disbursedOn:"2026-08-26",signedOn:"2026-08-26",initialLoanRate:15,
+ payTo:{bank:"Т-Банк",phone:"+7 926 228-40-56",recipient:"Шлеенкова Светлана Владимировна",purpose:"Возврат займа и процентов по договору займа от 26.08.2026"}};
+const CBR_DEFAULT={rate:14,effectiveFrom:"2026-07-27",asOf:"2026-08-26",nextMeeting:"2026-09-11",source:"Банк России",sourceUrl:"https://www.cbr.ru/hd_base/keyrate/",live:false};
+const pad=(n,l)=>String(n).padStart(l,"0");
+const parse=e=>{const[t,n,r]=e.split("-").map(Number);return{y:t,m:n,d:r}};
+const fmtISO=(y,m,d)=>pad(y,4)+"-"+pad(m,2)+"-"+pad(d,2);
+const todayISO=(e=new Date)=>fmtISO(e.getFullYear(),e.getMonth()+1,e.getDate());
+const utc=e=>{const{y,m,d}=parse(e);return Date.UTC(y,m-1,d)};
+const cmp=(a,b)=>utc(a)-utc(b);
+const daysBetween=(a,b)=>Math.round((utc(b)-utc(a))/864e5);
+const isLeap=y=>y%4==0&&y%100!=0||y%400==0;
+const yearDays=y=>isLeap(y)?366:365;
+const addDays=(e,t)=>{const d=new Date(utc(e)+t*864e5);return fmtISO(d.getUTCFullYear(),d.getUTCMonth()+1,d.getUTCDate())};
+const addMonths=(e,t)=>{const{y,m,d}=parse(e);const a=new Date(Date.UTC(y,m-1+t,1));const o=a.getUTCFullYear(),s=a.getUTCMonth()+1;const c=new Date(Date.UTC(o,s,0)).getUTCDate();return fmtISO(o,s,Math.min(d,c))};
+const nextMonthFirst=e=>{const{y,m}=parse(e);return m===12?fmtISO(y+1,1,1):fmtISO(y,m+1,1)};
+const monthDay=(e,t=25)=>{const{y,m}=parse(e);return fmtISO(y,m,t)};
+const nextPayDay=(e,t=25)=>{const{y,m,d}=parse(e);return d<t?fmtISO(y,m,t):monthDay(addMonths(fmtISO(y,m,1),1),t)};
+const minDate=(e,t)=>cmp(e,t)<=0?e:t;
+const firstOfNext=e=>parse(e).d===1?e:nextMonthFirst(e);
+const loanRateFor=(e,t=1)=>Math.round((e+t)*100)/100;
+const R2=e=>Math.round((e+2**-52)*100)/100;
+
+function buildSchedule(cbr,fut){
+  const n=[{from:M0.disbursedOn,annualRate:M0.initialLoanRate}];
+  const add=(rate,eff)=>{
+    const r=firstOfNext(eff);
+    if(cmp(r,M0.disbursedOn)<=0)return;
+    const i=loanRateFor(rate),a=n[n.length-1];
+    if(a&&a.annualRate===i&&a.from===r)return;
+    if(a&&a.from===r){a.annualRate=i;return}
+    if(a&&cmp(r,a.from)<=0)return;
+    n.push({from:r,annualRate:i});
+  };
+  add(cbr.rate,cbr.effectiveFrom);
+  if(fut&&fut.futureCbr!==undefined)add(fut.futureCbr,fut.futureEffectiveFrom??cbr.asOf);
+  return n;
+}
+function rateAt(sch,date){let n=sch[0]?.annualRate??M0.initialLoanRate;for(const r of sch){if(cmp(date,r.from)>=0)n=r.annualRate;else break}return n}
+function segEnd(start,sch,end){const{y}=parse(start);let i=minDate(end,(y+1)+"-01-01");for(const n of sch)if(cmp(n.from,start)>0){i=minDate(i,n.from);break}return i}
+function interestFor(bal,start,end,sch){
+  if(bal<=0||cmp(end,start)<=0)return 0;
+  let t=0,a=start;
+  while(cmp(a,end)<0){
+    const nx=segEnd(a,sch,end),o=daysBetween(a,nx);
+    if(o<=0)break;
+    t+=rateAt(sch,a)/100*bal*(o/yearDays(parse(a).y));
+    a=nx;
+  }
+  return R2(t);
+}
+function snapshotOf(pays,sch){
+  const list=[...pays].filter(e=>e.amount>0).sort((a,b)=>cmp(a.date,b.date)||String(a.id).localeCompare(String(b.id)));
+  let rem=M0.principal,last=M0.disbursedOn;const posted=[];let paid=0,pInt=0,pPr=0;
+  for(const e of list){
+    if(rem<=0)break;
+    if(cmp(e.date,last)<0)continue;
+    const int=interestFor(rem,last,e.date,sch),amt=R2(e.amount),toInt=Math.min(amt,int);
+    let pr=R2(amt-toInt);if(pr>rem)pr=rem;
+    rem=R2(rem-pr);if(rem<.005)rem=0;
+    const warn=int>amt+.005?"interest-exceeds-payment":void 0;
+    posted.push({id:e.id,date:e.date,amount:R2(toInt+pr),interest:R2(toInt),principal:pr,balanceAfter:rem,status:rem===0?"final":"posted",kind:e.kind,warning:warn});
+    paid+=toInt+pr;pInt+=toInt;pPr+=pr;last=e.date;
+  }
+  const nextOn=rem<=0?null:posted.length===0?M0.firstPaymentOn:nextPayDay(last,M0.paymentDay);
+  let nInt=0,nPr=0,nAmt=0,exceeds=false;
+  if(rem>0&&nextOn){
+    nInt=interestFor(rem,last,nextOn,sch);
+    const p=M0.monthlyPayment;
+    if(nInt>=p){exceeds=true;nAmt=p;nPr=0}
+    else{const tot=R2(rem+nInt);nAmt=Math.min(p,tot);nPr=R2(nAmt-nInt);if(nPr>rem)nPr=rem}
+  }
+  return{remaining:rem,posted,paidTotal:R2(paid),paidInterest:R2(pInt),paidPrincipal:R2(pPr),nextPaymentOn:nextOn,nextInterest:nInt,nextPrincipal:nPr,nextAmount:R2(nAmt),interestExceedsPayment:exceeds,fullyPaidOn:rem===0?posted.at(-1)?.date??last:null,lastAccrualStart:last};
+}
+const MAX_STEPS=480;
+function project(rem,start,nextOn,sch,pay=M0.monthlyPayment){
+  const pts=[{date:start,balance:rem,interest:0,principal:0,payment:0}];
+  if(rem<=0)return{points:pts,closeOn:start,months:0,stalled:false};
+  let o=rem,s=start,c=nextOn,l=0,u=false;
+  while(o>0&&l<MAX_STEPS){
+    const e=interestFor(o,s,c,sch),t=R2(o+e);let n=Math.min(pay,t),d=R2(n-Math.min(n,e));
+    if(e>=pay&&t>pay){d=0;n=pay;u=true}
+    if(d>o)d=o;
+    o=R2(o-d);if(o<.005)o=0;
+    l+=1;pts.push({date:c,balance:o,interest:e,principal:d,payment:R2(n)});
+    if(o===0)return{points:pts,closeOn:c,months:l,stalled:false};
+    if(u&&l>3)return{points:pts,closeOn:null,months:l,stalled:true};
+    s=c;c=nextPayDay(c,M0.paymentDay);
+  }
+  return{points:pts,closeOn:null,months:l,stalled:true};
+}
+const flatSchedule=(rate,from=M0.disbursedOn)=>[{from,annualRate:rate}];
+function ghostsOf(snap,sch,n=3){
+  if(snap.remaining<=0||!snap.nextPaymentOn)return[];
+  return project(snap.remaining,snap.lastAccrualStart,snap.nextPaymentOn,sch).points.slice(1,1+n).map((e,i)=>({id:"ghost-"+e.date+"-"+i,date:e.date,amount:e.payment,interest:e.interest,principal:e.principal,balanceAfter:e.balance,status:e.balance===0?"final":"projected",kind:"scheduled"}));
+}
+function closeAtCbr(snap,cbrRate){
+  if(snap.remaining<=0)return{closeOn:snap.fullyPaidOn,months:0,stalled:false};
+  const n=flatSchedule(loanRateFor(cbrRate),snap.lastAccrualStart),r=snap.nextPaymentOn??addDays(snap.lastAccrualStart,1);
+  const i=project(snap.remaining,snap.lastAccrualStart,r,n);
+  return{closeOn:i.closeOn,months:i.months,stalled:i.stalled};
+}
+
+/* ===== Форматирование ===== */
+const fRub=new Intl.NumberFormat("ru-RU",{style:"currency",currency:"RUB",maximumFractionDigits:0,minimumFractionDigits:0});
+const fNum=new Intl.NumberFormat("ru-RU",{maximumFractionDigits:0});
+const fMonthYear=new Intl.DateTimeFormat("ru-RU",{month:"long",year:"numeric",timeZone:"UTC"});
+const fMonShort=new Intl.DateTimeFormat("ru-RU",{month:"short",year:"numeric",timeZone:"UTC"});
+const fFull=new Intl.DateTimeFormat("ru-RU",{day:"numeric",month:"long",year:"numeric",timeZone:"UTC"});
+const toDate=e=>{const[t,n,r]=e.split("-").map(Number);return new Date(Date.UTC(t,n-1,r))};
+const X=e=>fRub.format(Math.round(e));
+const numFmt=e=>fNum.format(Math.round(e));
+const pct=(e,t=2)=>e.toFixed(t).replace(".",",")+"%";
+const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
+const monthYear=e=>cap(fMonthYear.format(toDate(e)));
+const monShort=e=>fMonShort.format(toDate(e)).replace(" г.","");
+const dateFull=e=>fFull.format(toDate(e));
+const closeMonth=e=>monthYear(e).replace(" г.","").toLowerCase();
+function fmtPhone(e){const t=e.replace(/\D/g,"");return t.length===11&&t.startsWith("7")?"+7 "+t.slice(1,4)+" "+t.slice(4,7)+"-"+t.slice(7,9)+"-"+t.slice(9,11):e}
+function dayWord(e){const t=Math.abs(e)%100,n=t%10;return t>10&&t<20?"дней":n===1?"день":n>=2&&n<=4?"дня":"дней"}
+function relDays(target,today){
+  const u=Math.round((utc(target)-utc(today))/864e5);
+  return u===0?"сегодня":u===1?"завтра":u===2?"послезавтра":u>2?"через "+u+" "+dayWord(u):u===-1?"вчера · просрочено":"просрочено на "+(-u)+" "+dayWord(-u);
+}
+function monthsWord(e){const t=Math.abs(e)%100,n=t%10;return t>10&&t<20?e+" месяцев":n===1?e+" месяц":n>=2&&n<=4?e+" месяца":e+" месяцев"}
+function termWord(e){
+  const t=Math.floor(e/12),n=e%12;
+  const r=t===0?"":t%10==1&&t%100!=11?t+" год":t%10>=2&&t%10<=4&&(t%100<10||t%100>=20)?t+" года":t+" лет";
+  return t===0?monthsWord(n):n===0?r:r+" "+monthsWord(n);
+}
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+/* ===== Состояние ===== */
 const $=id=>document.getElementById(id);
-let payments=[],kind="scheduled",unlocked=false,busy=false;
 const PIN_H=1482813072,GH={owner:"shleenkov88",repo:"semeinyi-zaem",path:"payments.json",branch:"main"};
-function hashPin(s){let h=0;for(let i=0;i<s.length;i++)h=((h<<5)-h)+s.charCodeAt(i)|0;return h}
-function b64(str){const u=new TextEncoder().encode(str);let s="";u.forEach(n=>s+=String.fromCharCode(n));return btoa(s)}
-function msg(t){$("adminMsg").textContent=t||""}
-function saveAll(){localStorage.setItem("zaem-pay",JSON.stringify(payments))}
-function snap(){
-  let rem=C.principal,last=C.start,paid=0,posted=[];
-  payments.slice().sort((a,b)=>a.date.localeCompare(b.date)).forEach(p=>{
-    const int=interestAt(C.rate,rem,last,p.date),toInt=Math.min(p.amount,int),prin=Math.min(Math.round((p.amount-toInt)*100)/100,rem);
-    rem=Math.max(0,Math.round((rem-prin)*100)/100);paid+=p.amount;
-    posted.push({id:p.id,date:p.date,amount:p.amount,kind:p.kind,interest:toInt,principal:prin});last=p.date;
-  });
-  const nextOn=rem<=0?null:(payments.length?next25(payments.slice().sort((a,b)=>a.date.localeCompare(b.date)).at(-1).date):C.first);
-  return {rem,paid,posted,nextOn};
+let payments=[],cbr={...CBR_DEFAULT},sliderCbr=CBR_DEFAULT.rate,sliderTouched=false;
+let kind="scheduled",unlocked=false,busy=false,lastPublish=0,loaded=false,model=null,TODAY=todayISO();
+
+function computeModel(){
+  const today=TODAY,sch=buildSchedule(cbr),snap=snapshotOf(payments,sch);
+  const curRate=rateAt(sch,today),g=loanRateFor(cbr.rate),v=firstOfNext(cbr.effectiveFrom);
+  const pending=cmp(v,today)>0&&Math.abs(g-curRate)>.001;
+  const ghosts=ghostsOf(snap,sch,3);
+  const official=snap.remaining<=0||!snap.nextPaymentOn?{points:[],closeOn:snap.fullyPaidOn,months:0,stalled:false}:project(snap.remaining,snap.lastAccrualStart,snap.nextPaymentOn,sch);
+  const sSch=buildSchedule(cbr,{futureCbr:sliderCbr,futureEffectiveFrom:today});
+  const slider=snap.remaining<=0||!snap.nextPaymentOn?{points:[],closeOn:snap.fullyPaidOn,months:0,stalled:false}:project(snap.remaining,snap.lastAccrualStart,snap.nextPaymentOn,sSch);
+  return{today,sch,snap,currentLoanRate:pending?curRate:g,ghosts,ledger:snap.posted.length===0?ghosts:[...snap.posted,...ghosts],official,slider,close14:closeAtCbr(snap,14),close12:closeAtCbr(snap,12)};
+}
+
+/* ===== Отрисовка ===== */
+let shownRem=0,animRaf=0;
+function animateRemaining(target){
+  const el=$("remaining");
+  if(matchMedia("(prefers-reduced-motion: reduce)").matches){el.textContent=X(target);shownRem=target;return}
+  cancelAnimationFrame(animRaf);
+  const from=shownRem,t0=performance.now(),dur=1100;
+  const step=t=>{const i=Math.min(1,(t-t0)/dur),o=1-(1-i)**3;el.textContent=X(from+(target-from)*o);if(i<1)animRaf=requestAnimationFrame(step);else shownRem=target};
+  animRaf=requestAnimationFrame(step);
+}
+function renderHero(m){
+  const s=m.snap;
+  $("today").textContent=dateFull(m.today).replace(" г.","");
+  if(shownRem!==s.remaining||!$("remaining").dataset.done){$("remaining").dataset.done="1";animateRemaining(s.remaining)}
+  const o=Math.min(100,Math.max(0,s.paidPrincipal/M0.principal*100));
+  $("bar").style.width=(s.paidTotal>0?Math.max(o,2):0)+"%";
+  $("paid").textContent=X(s.paidTotal);
+  $("paidSub").innerHTML=s.paidTotal>0?'<div class="mt-3 space-y-1 text-sm leading-snug sm:text-base"><p class="text-emerald-bright">в тело '+X(s.paidPrincipal)+'</p><p class="text-gold-bright">проценты '+X(s.paidInterest)+'</p></div>':'<p class="mt-3 text-sm text-fg-subtle">платежей пока нет</p>';
+  $("nextAmt").textContent=s.remaining<=0?"—":X(s.nextAmount||M0.monthlyPayment);
+  const rel=s.nextPaymentOn?relDays(s.nextPaymentOn,m.today):null,late=!!rel&&rel.includes("просроч");
+  $("nextSub").innerHTML=rel&&s.remaining>0?'<p class="mt-3 text-sm sm:text-base '+(late?"text-danger":"text-gold-bright")+'">'+rel+'</p>':"";
+  $("rateLine").textContent="Ставка "+pct(m.currentLoanRate)+" = ЦБ "+pct(cbr.rate)+" + 1";
+  $("cbrLink").href=cbr.sourceUrl||CBR_DEFAULT.sourceUrl;
+  $("stPaid").textContent=X(s.paidTotal);$("stRem").textContent=X(s.remaining);
+}
+function renderDonut(m){
+  const s=m.snap,r=s.nextAmount||M0.monthlyPayment,i=s.nextInterest,a=s.nextPrincipal;
+  const o=r>0?Math.min(1,Math.max(0,i/r)):0,G=2*Math.PI*92,sc=Math.max(0,G-8*(o>.02&&o<.98?2:0)),c=sc*o,l=sc*(1-o),closed=s.remaining<=0;
+  $("arcI").setAttribute("stroke-dasharray",c+" "+(G-c));
+  $("arcP").setAttribute("stroke-dasharray",l+" "+(G-l));
+  $("arcP").setAttribute("stroke-dashoffset",-(c+(sc<G?8:0)));
+  $("dnAmt").textContent=numFmt(r)+" ₽";
+  $("dnCap").textContent=closed?"закрыто":"следующий";
+  $("dnLegend").style.display=closed?"none":"";
+  const rel=s.nextPaymentOn?relDays(s.nextPaymentOn,m.today):"";
+  let h='<p class="text-[0.7rem] uppercase tracking-[0.22em] text-gold">Очередной платёж</p><h2 class="mt-2 font-display text-3xl text-fg sm:text-4xl">'+(closed?"Долг закрыт":dateFull(s.nextPaymentOn??M0.firstPaymentOn))+'</h2>';
+  if(!closed&&s.nextPaymentOn)h+='<p class="mt-2 text-sm '+(rel.includes("просроч")?"text-danger":"text-gold-bright")+'">'+rel+'</p>';
+  if(closed)h+='<p class="mt-4 max-w-xl text-base leading-relaxed text-fg-muted">Все обязательства по договору исполнены. Спасибо.</p>';
+  else{
+    h+='<p class="mt-4 max-w-xl text-base leading-relaxed text-fg-muted">Из '+X(r)+': проценты <span class="text-gold-bright">'+X(i)+'</span>, в долг <span class="text-emerald-bright">'+X(a)+'</span>.</p>';
+    h+='<ul class="mt-8 grid gap-3 sm:grid-cols-2"><li class="rounded-md bg-bg-subtle px-4 py-3"><p class="flex items-center gap-2 text-xs uppercase tracking-[0.16em] text-fg-subtle"><span class="inline-block size-2.5 rounded-full bg-gold"></span>Проценты</p><p class="mt-1 font-display text-2xl tabular text-fg">'+X(i)+'</p><p class="text-sm text-fg-subtle">'+(r?Math.round(i/r*100):0)+'% платежа</p></li><li class="rounded-md bg-bg-subtle px-4 py-3"><p class="flex items-center gap-2 text-xs uppercase tracking-[0.16em] text-fg-subtle"><span class="inline-block size-2.5 rounded-full bg-emerald-bright"></span>Погашение долга</p><p class="mt-1 font-display text-2xl tabular text-fg">'+X(a)+'</p><p class="text-sm text-fg-subtle">'+(r?Math.round(a/r*100):0)+'% платежа</p></li></ul>';
+    if(s.interestExceedsPayment)h+='<p class="mt-6 rounded-md bg-danger/10 px-4 py-3 text-sm leading-relaxed text-danger">Проценты за период больше 25\u00a0000\u00a0₽. Весь платёж уйдёт на проценты, долг не уменьшится, и срок займа удлинится.</p>';
+  }
+  $("dnText").innerHTML=h;
+}
+const TRASH='<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-2 size-4" aria-hidden="true"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path><line x1="10" x2="10" y1="11" y2="17"></line><line x1="14" x2="14" y1="11" y2="17"></line></svg>';
+function entryLabel(e){return e.status==="projected"?"ожидается":e.status==="final"?"закрывающий":e.kind==="early"?"досрочный":"плановый"}
+function renderLedger(m){
+  $("firstNote").innerHTML=m.snap.posted.length===0?'<p class="mb-8 max-w-2xl rounded-md bg-bg-elevated px-5 py-4 text-base leading-relaxed text-fg-muted">Первый платёж ожидается '+dateFull(M0.firstPaymentOn)+'. Досрочку можно внести раньше.</p>':"";
+  $("btnSched").style.display=$("btnEarly").style.display=m.snap.remaining>0?"":"none";
+  $("ledger").innerHTML=m.ledger.map(e=>{
+    const proj=e.status==="projected",canDel=e.status==="posted"||e.status==="final";
+    return '<li class="relative list-none pb-8 last:pb-0'+(proj?" opacity-45":"")+'"><span class="absolute -left-[1.45rem] top-1.5 size-2.5 rounded-full sm:-left-[1.7rem] '+(proj?"bg-fg-subtle":"bg-gold")+'"></span><p class="font-display text-xl text-fg">'+dateFull(e.date)+'</p><p class="mt-1 text-fg-muted">'+entryLabel(e)+' · '+X(e.amount)+'</p><p class="mt-1 text-sm text-fg-subtle">в проценты '+X(e.interest)+' · в тело '+X(e.principal)+'</p>'
+      +(canDel?'<button type="button" class="cab-del mt-3 inline-flex min-h-11 items-center gap-2 text-sm text-danger" data-del="'+esc(e.id)+'">'+TRASH+'Удалить</button>':"")+'</li>';
+  }).join("");
+}
+function renderRules(){}
+function updateHint(){
+  const m=model;if(!m)return;
+  const date=$("payDate").value,amt=Number(String($("payAmt").value).replace(/\s/g,"").replace(",","."));
+  const ok=Number.isFinite(amt)&&amt>0,rem=m.snap.remaining;
+  const int=date&&rem>0?interestFor(rem,m.snap.lastAccrualStart,date,m.sch):0;
+  const toInt=ok?Math.min(amt,int):0,toPr=ok?R2(Math.min(amt-toInt,rem)):0;
+  $("payHint").textContent=kind==="early"
+    ?(ok?"Из "+X(amt)+" в проценты уйдёт "+X(toInt)+", в тело долга — "+X(toPr)+". Ежемесячные 25\u00a0000\u00a0₽ сохранятся, срок станет короче.":"Можно в любой день, любую сумму, без комиссии. Сначала закрываются проценты за дни с последнего платежа, остальное гасит долг.")
+    :"Плановый платёж по договору — 25\u00a0000\u00a0₽ не позднее 25-го числа.";
+  $("formTitle").textContent=kind==="early"?"Досрочный платёж":"Очередной платёж";
+}
+
+/* ===== График ===== */
+const NS="http://www.w3.org/2000/svg";
+function monoPath(pts){
+  const n=pts.length;if(!n)return"";
+  const f=v=>Math.round(v*1000)/1000;
+  if(n===1)return"M"+f(pts[0][0])+","+f(pts[0][1]);
+  if(n===2)return"M"+f(pts[0][0])+","+f(pts[0][1])+"L"+f(pts[1][0])+","+f(pts[1][1]);
+  const sign=x=>x<0?-1:1;
+  const slope3=(x0,y0,x1,y1,x2,y2)=>{const h0=x1-x0,h1=x2-x1,s0=(y1-y0)/(h0||(h1<0?-0:0)),s1=(y2-y1)/(h1||(h0<0?-0:0)),p=(s0*h1+s1*h0)/(h0+h1);return(sign(s0)+sign(s1))*Math.min(Math.abs(s0),Math.abs(s1),.5*Math.abs(p))||0};
+  const t=new Array(n);
+  for(let i=1;i<n-1;i++)t[i]=slope3(pts[i-1][0],pts[i-1][1],pts[i][0],pts[i][1],pts[i+1][0],pts[i+1][1]);
+  const s2=(x0,y0,x1,y1,tt)=>{const h=x1-x0;return h?(3*(y1-y0)/h-tt)/2:tt};
+  t[0]=s2(pts[0][0],pts[0][1],pts[1][0],pts[1][1],t[1]);
+  t[n-1]=s2(pts[n-2][0],pts[n-2][1],pts[n-1][0],pts[n-1][1],t[n-2]);
+  let d="M"+f(pts[0][0])+","+f(pts[0][1]);
+  for(let i=1;i<n;i++){
+    const[x0,y0]=pts[i-1],[x1,y1]=pts[i],dx=(x1-x0)/3;
+    d+="C"+f(x0+dx)+","+f(y0+dx*t[i-1])+","+f(x1-dx)+","+f(y1-dx*t[i])+","+f(x1)+","+f(y1);
+  }
+  return d;
+}
+function niceTicks(max,count=5){
+  if(!(max>0))return{ticks:[0],top:1};
+  const digits=v=>Math.floor(Math.log10(Math.abs(v)))+1;
+  let corr=0,step,below,up;
+  for(;;){
+    const rough=max/(count-1),dc=digits(rough),base=Math.pow(10,dc-1),ratio=rough/base,scale=dc!==1?.05:.1;
+    step=(Math.ceil(ratio/scale)+corr)*scale*base;
+    below=0;up=Math.ceil(max/step);
+    const total=below+1+up;
+    if(total>count){corr++;continue}
+    if(total<count)up+=count-total;
+    break;
+  }
+  const ticks=[];for(let i=0;i<=up;i++)ticks.push(i*step);
+  return{ticks,top:up*step};
+}
+const yFmt=e=>e>=1e6?(e/1e6).toFixed(1).replace(".",",")+" млн":Math.round(e/1e3)+" тыс";
+let measureCtx=null;
+function textW(t){if(!measureCtx){measureCtx=document.createElement("canvas").getContext("2d")}measureCtx.font="12px Manrope, 'Segoe UI', system-ui, sans-serif";return measureCtx.measureText(t).width}
+function svgEl(name,attrs,text){const e=document.createElementNS(NS,name);for(const k in attrs)e.setAttribute(k,attrs[k]);if(text!==undefined)e.textContent=text;return e}
+let chartState=null;
+function renderChart(){
+  const box=$("chartbox"),m=model;
+  if(!m||!$("chartDet").open)return;
+  const W=box.clientWidth,H=box.clientHeight;if(!W||!H)return;
+  const sMap=new Map(m.slider.points.map(p=>[p.date,p.balance])),oMap=new Map(m.official.points.map(p=>[p.date,p.balance]));
+  const dates=[...new Set([...sMap.keys(),...oMap.keys()])].sort();
+  const data=dates.map(d=>({date:d,slider:sMap.get(d),official:oMap.get(d)}));
+  box.innerHTML="";chartState=null;
+  if(!data.length)return;
+  const L=62,T=8,Rr=8,B=30,pw=W-L-Rr,ph=H-T-B;
+  let max=0;for(const d of data){if(d.slider>max)max=d.slider;if(d.official>max)max=d.official}
+  const nt=niceTicks(max),top=nt.top||1;
+  const xAt=i=>data.length===1?L:L+i*pw/(data.length-1),yAt=v=>T+(1-v/top)*ph;
+  const svg=svgEl("svg",{class:"recharts-surface",width:W,height:H,viewBox:"0 0 "+W+" "+H,style:"width:100%;height:100%"});
+  const defs=svgEl("defs",{});const lg=svgEl("linearGradient",{id:"fillSlider",x1:"0",y1:"0",x2:"0",y2:"1"});
+  lg.appendChild(svgEl("stop",{offset:"0%","stop-color":"var(--color-gold)","stop-opacity":".28"}));lg.appendChild(svgEl("stop",{offset:"100%","stop-color":"var(--color-gold)","stop-opacity":"0"}));
+  defs.appendChild(lg);svg.appendChild(defs);
+  for(const v of nt.ticks){const y=yAt(v);svg.appendChild(svgEl("line",{stroke:"var(--color-line)",fill:"none",x1:L,y1:y,x2:L+pw,y2:y}))}
+  // подписи по X: первая дата каждого года, лишние скрываем
+  const yearFirst=[],seen=new Set();data.forEach((d,i)=>{const y=d.date.slice(0,4);if(!seen.has(y)){seen.add(y);yearFirst.push(i)}});
+  const kept=[];
+  for(let k=yearFirst.length-1;k>=0;k--){
+    const i=yearFirst[k],label=monShort(data[i].date),w=textW(label),x=xAt(i);
+    if(x-w/2<L||x+w/2>W)continue;
+    const last=kept[kept.length-1];
+    if(last&&last.x-last.w/2-(x+w/2)<5)continue;
+    kept.push({x,w,label});
+  }
+  for(const k of kept)svg.appendChild(svgEl("text",{x:k.x,y:T+ph+8,"text-anchor":"middle","font-size":12,fill:"var(--color-fg-subtle)"},k.label)).setAttribute("dy","0.71em");
+  for(const v of nt.ticks)svg.appendChild(svgEl("text",{x:L-8,y:yAt(v),"text-anchor":"end","font-size":12,fill:"var(--color-fg-subtle)",dy:"0.355em"},yFmt(v)));
+  const series=(key,stroke,sw,op,fill)=>{
+    let seg=[];const segs=[];
+    data.forEach((d,i)=>{if(typeof d[key]==="number")seg.push([xAt(i),yAt(d[key])]);else if(seg.length){segs.push(seg);seg=[]}});
+    if(seg.length)segs.push(seg);
+    for(const sg of segs){
+      const line=monoPath(sg);
+      if(fill){const a=line+"L"+sg[sg.length-1][0]+","+(T+ph)+"L"+sg[0][0]+","+(T+ph)+"Z";svg.appendChild(svgEl("path",{d:a,fill:"url(#fillSlider)",stroke:"none"}))}
+      svg.appendChild(svgEl("path",{d:line,fill:"none",stroke,"stroke-width":sw,"stroke-opacity":op,"stroke-linejoin":"round"}));
+    }
+  };
+  series("official","var(--color-emerald-bright)",1.5,.45,false);
+  series("slider","var(--color-gold)",2.2,1,true);
+  const cur=svgEl("line",{stroke:"var(--color-line-strong)",y1:T,y2:T+ph,display:"none"});svg.appendChild(cur);
+  const dotO=svgEl("circle",{r:4,fill:"var(--color-emerald-bright)",stroke:"#fff","stroke-width":2,display:"none"}),dotS=svgEl("circle",{r:4,fill:"var(--color-gold)",stroke:"#fff","stroke-width":2,display:"none"});
+  svg.appendChild(dotO);svg.appendChild(dotS);
+  box.appendChild(svg);
+  const tip=document.createElement("div");tip.className="ctip rounded-md bg-bg px-3 py-2 text-sm shadow-[var(--shadow-card)]";tip.style.display="none";box.appendChild(tip);
+  const show=ev=>{
+    const r=box.getBoundingClientRect(),px=(ev.touches?ev.touches[0].clientX:ev.clientX)-r.left;
+    if(px<L||px>L+pw){hide();return}
+    let i=Math.round((px-L)/(pw/Math.max(1,data.length-1)));i=Math.max(0,Math.min(data.length-1,i));
+    const d=data[i],x=xAt(i);
+    cur.setAttribute("x1",x);cur.setAttribute("x2",x);cur.removeAttribute("display");
+    for(const[dot,k]of[[dotO,"official"],[dotS,"slider"]]){if(typeof d[k]==="number"){dot.setAttribute("cx",x);dot.setAttribute("cy",yAt(d[k]));dot.removeAttribute("display")}else dot.setAttribute("display","none")}
+    let h='<p class="mb-1 text-fg-subtle">'+monthYear(d.date)+'</p>';
+    if(typeof d.official==="number")h+='<p class="tabular text-fg">Если ставка ЦБ не изменится: '+X(d.official)+'</p>';
+    if(typeof d.slider==="number")h+='<p class="tabular text-fg">При выбранной ставке: '+X(d.slider)+'</p>';
+    tip.innerHTML=h;tip.style.display="block";
+    const tw=tip.offsetWidth;let tx=x+12;if(tx+tw>W)tx=x-12-tw;if(tx<0)tx=0;
+    tip.style.left=tx+"px";tip.style.top=Math.max(0,T+10)+"px";
+  };
+  const hide=()=>{cur.setAttribute("display","none");dotO.setAttribute("display","none");dotS.setAttribute("display","none");tip.style.display="none"};
+  box.onmousemove=show;box.onmouseleave=hide;box.ontouchstart=show;box.ontouchmove=show;box.ontouchend=hide;
+  chartState={data};
+}
+function renderChartTexts(m){
+  $("chDesc").innerHTML="Сплошная линия — если ключевая ставка ЦБ станет "+pct(sliderCbr)+". Полупрозрачная — если останется "+pct(cbr.rate)+", как сейчас.";
+  $("slVal").textContent=pct(sliderCbr);$("slLoan").textContent=pct(loanRateFor(sliderCbr));
+  const sl=$("slider");sl.value=sliderCbr;sl.setAttribute("aria-valuenow",sliderCbr);
+  const p=m.slider;
+  $("slClose").textContent=p.stalled?"при этой ставке долг не тает — проценты съедают весь платёж":p.closeOn?"закрытие — "+closeMonth(p.closeOn)+" ("+termWord(p.months)+")":"";
+  const f=(c)=>c.closeOn?closeMonth(c.closeOn)+" ("+termWord(c.months)+")":"не определено";
+  $("chFoot").textContent="При ставке ЦБ 14% закрытие — "+f(m.close14)+"; при 12% — "+f(m.close12)+".";
 }
 function render(){
-  const s=snap();
-  $("remaining").textContent=rub(s.rem);
-  $("paid").textContent=rub(s.paid);
-  $("nextAmt").textContent=s.rem<=0?"—":rub(C.payment);
-  if(s.nextOn){const n=days(today(),s.nextOn);$("due").textContent=(n<0?"просрочено на "+(-n)+" дн.":n===0?"сегодня":"через "+n+" дн.")+", "+dayMonth(s.nextOn)}
-  else $("due").textContent="";
-  $("rateLine").textContent="Ставка "+C.rate.toFixed(2).replace(".",",")+"% = ЦБ "+C.cbr.toFixed(2).replace(".",",")+"% + 1";
-  $("list").innerHTML=s.posted.map(e=>{
-    const lab=e.kind==="early"?"досрочный":"плановый";
-    const del=unlocked?' <button class="del" data-del="'+e.id+'" type="button">удалить</button>':"";
-    return "<li><b>"+dayMonth(e.date)+"</b><br>"+lab+" · "+rub(e.amount)+del+"<br><span class='dim'>проценты "+rub(e.interest)+" · тело "+rub(e.principal)+"</span></li>";
-  }).join("")||"<li class='dim'>Платежей нет</li>";
+  model=computeModel();
+  renderHero(model);renderDonut(model);renderLedger(model);renderChartTexts(model);renderChart();updateHint();
 }
+
+/* ===== Шеринг, копирование, календарь ===== */
+function shareText(m){
+  const s=m.snap,a=s.nextPaymentOn?relDays(s.nextPaymentOn,m.today):"";
+  return["Семейный заём · договор № 1","Осталось: "+X(s.remaining),"Внесено: "+X(s.paidTotal)+" (в тело "+X(s.paidPrincipal)+", проценты "+X(s.paidInterest)+")",s.remaining>0&&s.nextPaymentOn?"Следующий: "+X(s.nextAmount||M0.monthlyPayment)+" · "+a+", "+dateFull(s.nextPaymentOn):"Долг закрыт.","Ставка "+pct(m.currentLoanRate)+" = ЦБ "+pct(cbr.rate)+" + 1","Перевод: "+M0.payTo.phone].filter(Boolean).join("\n");
+}
+function rr(u,t,n,r,i,a){u.beginPath();u.moveTo(t+a,n);u.arcTo(t+r,n,t+r,n+i,a);u.arcTo(t+r,n+i,t,n+i,a);u.arcTo(t,n+i,t,n,a);u.arcTo(t,n,t+r,n,a);u.closePath()}
+async function snapshotImage(m){
+  const s=m.snap,a=s.nextPaymentOn?relDays(s.nextPaymentOn,m.today):"",list=s.posted,w=1080,h=Math.max(1600,1180+list.length*110);
+  const cv=document.createElement("canvas");cv.width=w;cv.height=h;const u=cv.getContext("2d");if(!u)throw Error("canvas");
+  u.fillStyle="#0c1410";u.fillRect(0,0,w,h);
+  u.fillStyle="#c4a574";u.font="500 28px Georgia, serif";u.fillText("ДОГОВОР № 1",72,110);
+  u.fillStyle="#f3ead8";u.font="500 72px Georgia, serif";u.fillText("Семейный заём",72,200);
+  u.fillStyle="#8f8168";u.font="500 26px sans-serif";u.fillText("ОСТАЛОСЬ",72,300);
+  u.fillStyle="#e8d0a4";u.font="500 96px Georgia, serif";u.fillText(X(s.remaining),72,410);
+  u.fillStyle="#121c17";rr(u,72,470,448,280,28);u.fill();rr(u,560,470,448,280,28);u.fill();
+  u.fillStyle="#8f8168";u.font="500 24px sans-serif";u.fillText("ВНЕСЕНО",100,526);u.fillText("СЛЕДУЮЩИЙ",588,526);
+  u.fillStyle="#f3ead8";u.font="500 52px Georgia, serif";u.fillText(X(s.paidTotal),100,600);u.fillText(s.remaining<=0?"—":X(s.nextAmount||M0.monthlyPayment),588,600);
+  u.font="400 28px sans-serif";
+  if(s.paidTotal>0){u.fillStyle="#6ea88a";u.fillText("в тело "+X(s.paidPrincipal),100,656);u.fillStyle="#e8d0a4";u.fillText("проценты "+X(s.paidInterest),100,698)}
+  if(a){u.fillStyle="#e8d0a4";u.fillText(a,588,656)}
+  let d=820;u.fillStyle="#c4b496";u.font="400 30px sans-serif";u.fillText("Ставка "+pct(m.currentLoanRate)+"  =  ЦБ "+pct(cbr.rate)+" + 1",72,d);d+=56;u.fillText(fmtPhone(M0.payTo.phone),72,d);
+  if(list.length){d+=90;u.fillStyle="#c4a574";u.font="500 24px sans-serif";u.fillText("ПЛАТЕЖИ",72,d);d+=24;
+    for(const e of list){d+=86;u.fillStyle="#f3ead8";u.font="500 34px Georgia, serif";u.fillText(dateFull(e.date),72,d);u.fillStyle="#c4b496";u.font="400 28px sans-serif";u.fillText((e.kind==="early"?"досрочный":"плановый")+"  "+X(e.amount)+"  ·  тело "+X(e.principal),72,d+40)}}
+  u.fillStyle="#8f8168";u.font="400 24px sans-serif";u.fillText("Снимок на "+dateFull(m.today),72,h-64);
+  const blob=await new Promise((res,rej)=>cv.toBlob(b=>b?res(b):rej(Error("toBlob")),"image/jpeg",.92));
+  return new File([blob],"semeinyi-zaem.jpg",{type:"image/jpeg"});
+}
+let shareUrl=null;
+async function doShare(){
+  const msgEl=$("shareMsg");const setMsg=t=>{msgEl.textContent=t||"";msgEl.hidden=!t};
+  setMsg("Готовлю снимок…");
+  let file;try{file=await snapshotImage(model)}catch(e){setMsg("Не удалось собрать снимок");return}
+  if(shareUrl)URL.revokeObjectURL(shareUrl);
+  shareUrl=URL.createObjectURL(file);$("shareImg").src=shareUrl;$("shareBox").hidden=false;$("shareShow").hidden=true;
+  try{if(navigator.share){
+    try{await navigator.share({files:[file],title:"Семейный заём"});setMsg("Выберите Max");setTimeout(()=>setMsg(""),2500);return}catch(e){if(e&&e.name==="AbortError"){setMsg("");return}}
+    try{await navigator.share({title:"Семейный заём",text:shareText(model)});setMsg("");return}catch(e){if(e&&e.name==="AbortError"){setMsg("");return}}
+  }}catch(e){}
+  setMsg("Зажмите снимок → Поделиться → Max");
+}
+function icsText(){
+  const first=M0.firstPaymentOn.replaceAll("-",""),signed=M0.signedOn.replaceAll("-","");
+  const desc=["Перевод Светлане Владимировне, "+M0.payTo.bank+".","Телефон: "+M0.payTo.phone+".","Назначение: "+M0.payTo.purpose+"."].join("\\n");
+  return["BEGIN:VCALENDAR","VERSION:2.0","CALSCALE:GREGORIAN","PRODID:-//Семейный заём//RU","METHOD:PUBLISH","BEGIN:VEVENT","UID:family-loan-1-monthly@shleenkov","DTSTAMP:"+signed+"T090000Z","DTSTART;VALUE=DATE:"+first,"RRULE:FREQ=MONTHLY;BYMONTHDAY=25","SUMMARY:Семейный заём — "+X(M0.monthlyPayment),"DESCRIPTION:"+desc,"END:VEVENT","END:VCALENDAR",""].join("\r\n");
+}
+function downloadIcs(){
+  const url=URL.createObjectURL(new Blob([icsText()],{type:"text/calendar;charset=utf-8"})),a=document.createElement("a");
+  a.href=url;a.download="semeinyi-zaem.ics";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+async function copyTo(btn,text,doneLabel){
+  try{await navigator.clipboard.writeText(text)}catch(e){return}
+  const sp=btn.querySelector("span"),old=sp.textContent;sp.textContent=doneLabel;setTimeout(()=>{sp.textContent=old},1600);
+}
+
+/* ===== Данные: payments.json, cbr.json ===== */
+function saveAll(){try{localStorage.setItem("zaem-pay",JSON.stringify(payments))}catch(e){}}
+const okPays=a=>Array.isArray(a)&&a.every(p=>p&&typeof p.date==="string"&&typeof p.amount==="number");
 async function pullRemote(){
   if(busy)return;
   try{
     const token=(localStorage.getItem("zaem-gh")||"").trim();
-    let r;
+    let r=null;
     if(token){
-      r=await fetch("https://api.github.com/repos/"+GH.owner+"/"+GH.repo+"/contents/"+GH.path+"?ref="+GH.branch+"&t="+Date.now(),{cache:"no-store",headers:{Authorization:"Bearer "+token,Accept:"application/vnd.github.raw+json"}});
-      if(!r.ok)r=null;
+      try{
+        r=await fetch("https://api.github.com/repos/"+GH.owner+"/"+GH.repo+"/contents/"+GH.path+"?ref="+GH.branch+"&t="+Date.now(),{cache:"no-store",headers:{Authorization:"Bearer "+token,Accept:"application/vnd.github.raw+json"}});
+        if(!r.ok)r=null;
+      }catch(e){r=null}
     }
     if(!r)r=await fetch("payments.json?t="+Date.now(),{cache:"no-store"});
-    if(!r.ok)return;
+    if(!r.ok)return false;
     const remote=await r.json();
-    if(Array.isArray(remote)&&!busy){payments=remote;saveAll();render()}
+    if(okPays(remote)&&!busy){payments=remote;saveAll();return true}
   }catch(e){}
+  return false;
 }
 async function pullCbr(){
   try{
     const r=await fetch("cbr.json?t="+Date.now(),{cache:"no-store"});
     if(!r.ok)return;
     const d=await r.json();
-    if(typeof d.rate==="number"){C.cbr=d.rate;C.rate=Math.round((d.rate+1)*100)/100;render()}
+    if(typeof d.rate==="number"){
+      cbr={...CBR_DEFAULT,...d,rate:d.rate};
+      if(!sliderTouched)sliderCbr=cbr.rate;
+    }
   }catch(e){}
 }
+async function refresh(){
+  const [ok]=await Promise.all([pullRemote(),pullCbr()]);
+  if(ok===false&&!busy&&!loaded){try{const c=JSON.parse(localStorage.getItem("zaem-pay")||"null");if(okPays(c))payments=c}catch(e){}}
+  loaded=true;render();
+}
+
+/* ===== Кабинет ===== */
+const b64=str=>{const u=new TextEncoder().encode(str);let s="";u.forEach(n=>s+=String.fromCharCode(n));return btoa(s)};
+function hashPin(s){let h=0;for(let i=0;i<s.length;i++)h=((h<<5)-h)+s.charCodeAt(i)|0;return h}
+function msg(t){$("adminMsg").textContent=t||""}
+function flash(t){const f=$("flash");f.textContent=t;f.hidden=false;clearTimeout(flash.t);flash.t=setTimeout(()=>{f.hidden=true},5000)}
 async function publishPays(){
   const token=(localStorage.getItem("zaem-gh")||"").trim();
   if(!token){msg("Платёж записан только здесь. Чтобы увидела мама — сохраните токен GitHub.");$("tokBox").open=true;return false}
@@ -160,37 +545,112 @@ async function publishPays(){
     const meta=await get.json();
     const put=await fetch(url,{method:"PUT",headers:{...headers,"Content-Type":"application/json"},body:JSON.stringify({message:"Платёж семейного займа",content:b64(JSON.stringify(payments,null,2)+"\n"),sha:meta.sha,branch:GH.branch})});
     msg(put.ok?"Готово. Мама увидит изменения примерно через минуту.":"Не записалось: "+put.status);
+    if(put.ok)lastPublish=Date.now();
     return put.ok;
   }catch(e){msg("Нет связи, попробуйте ещё раз");return false}
   finally{busy=false}
+}
+function setKind(k){
+  kind=k;
+  $("kSched").classList.toggle("ghost",k!=="scheduled");$("kEarly").classList.toggle("ghost",k!=="early");
+  updateHint();
+}
+function prefill(k){
+  const s=model.snap;setKind(k);
+  if(k==="scheduled"){$("payDate").value=s.nextPaymentOn??M0.firstPaymentOn;$("payAmt").value=M0.monthlyPayment}
+  else{const t=todayISO();$("payDate").value=cmp(t,s.lastAccrualStart)<0?s.lastAccrualStart:t;$("payAmt").value=""}
+  updateHint();
 }
 function setUnlocked(on){
   unlocked=!!on;
   $("gateBox").style.display=on?"none":"";
   $("gateForm").classList.remove("on");
   $("adminBox").classList.toggle("on",on);
-  if(on){$("payDate").value=$("payDate").value||today();$("ghToken").value=localStorage.getItem("zaem-gh")||"";$("tokBox").open=!localStorage.getItem("zaem-gh")}
-  render();
+  if(on){
+    if(!$("payDate").value)prefill(kind);
+    $("ghToken").value=localStorage.getItem("zaem-gh")||"";
+    $("tokBox").open=!localStorage.getItem("zaem-gh");
+  }
+  if(model)renderLedger(model);
 }
-function setKind(k){kind=k;$("kSched").classList.toggle("off",k!=="scheduled");$("kEarly").classList.toggle("off",k!=="early")}
-$("openCab").onclick=e=>{e.preventDefault();$("gateForm").classList.add("on");$("pin").focus()};
-$("pin").onkeydown=e=>{if(e.key==="Enter")$("btnUnlock").click()};
-$("btnUnlock").onclick=()=>{if(hashPin($("pin").value)===PIN_H){localStorage.setItem("zaem-ok","1");setUnlocked(true);$("pin").value="";$("pinErr").textContent=""}else $("pinErr").textContent="Не тот пароль"};
-$("btnLock").onclick=()=>{localStorage.removeItem("zaem-ok");setUnlocked(false)};
-$("kSched").onclick=()=>setKind("scheduled");
-$("kEarly").onclick=()=>setKind("early");
-$("btnAdd").onclick=()=>{
-  const date=$("payDate").value,amount=Math.round(Number($("payAmt").value));
-  if(!date||!(amount>0)){msg("Нужны дата и сумма");return}
-  payments.push({id:"p-"+date+"-"+amount+"-"+Date.now().toString(36),date,amount,kind});
-  saveAll();render();publishPays();
-};
-$("btnSaveTok").onclick=()=>{const t=$("ghToken").value.trim();if(t)localStorage.setItem("zaem-gh",t);else localStorage.removeItem("zaem-gh");msg(t?"Токен сохранён в этом браузере":"Токен удалён")};
-$("btnPub").onclick=publishPays;
-$("list").onclick=e=>{const id=e.target.getAttribute&&e.target.getAttribute("data-del");if(!id||!unlocked)return;payments=payments.filter(p=>p.id!==id);saveAll();render();publishPays()};
-render();
-if(localStorage.getItem("zaem-ok")==="1")setUnlocked(true);
-Promise.all([pullRemote(),pullCbr()]);
+let pendingAction=null;
+function needUnlock(fn){
+  if(unlocked){fn();return}
+  pendingAction=fn;
+  $("gateBox").style.display="none";$("gateForm").classList.add("on");
+  $("gateForm").scrollIntoView({block:"center",behavior:"smooth"});
+  setTimeout(()=>$("pin").focus({preventScroll:true}),300);
+}
+function tryUnlock(){
+  if(hashPin($("pin").value)===PIN_H){
+    try{localStorage.setItem("zaem-ok","1")}catch(e){}
+    setUnlocked(true);$("pin").value="";$("pinErr").textContent="";
+    const fn=pendingAction;pendingAction=null;if(fn)fn();
+  }else $("pinErr").textContent="Не тот пароль";
+}
+function openForm(k){prefill(k);$("adminBox").scrollIntoView({block:"center",behavior:"smooth"})}
+
+function init(){
+  // тема
+  const chk=$("theme-paper");
+  chk.checked=document.documentElement.getAttribute("data-theme")==="paper";
+  chk.onchange=()=>{const v=chk.checked?"paper":"dark";document.documentElement.setAttribute("data-theme",v);try{localStorage.setItem("family-loan-theme",v)}catch(e){};renderChart()};
+  // шапка при прокрутке
+  const st=$("stick"),onScroll=()=>{st.hidden=!(window.scrollY>420)};
+  onScroll();addEventListener("scroll",onScroll,{passive:true});
+  // график
+  $("slider").oninput=e=>{sliderTouched=true;sliderCbr=Number(e.target.value);render()};
+  $("chartDet").addEventListener("toggle",renderChart);
+  if(window.ResizeObserver)new ResizeObserver(()=>renderChart()).observe($("chartbox"));else addEventListener("resize",renderChart);
+  // кнопки блока «Как перевести»
+  $("btnShare").onclick=()=>doShare();
+  $("shareHide").onclick=()=>{$("shareBox").hidden=true;$("shareShow").hidden=false};
+  $("shareShow").onclick=()=>{$("shareBox").hidden=false;$("shareShow").hidden=true};
+  $("btnCopyPhone").onclick=e=>copyTo(e.currentTarget,M0.payTo.phone,"Номер скопирован");
+  $("btnCopyPurpose").onclick=e=>copyTo(e.currentTarget,M0.payTo.purpose,"Назначение скопировано");
+  $("btnIcs").onclick=downloadIcs;
+  // кабинет
+  $("btnSched").onclick=()=>needUnlock(()=>openForm("scheduled"));
+  $("btnEarly").onclick=()=>needUnlock(()=>openForm("early"));
+  $("openCab").onclick=()=>{pendingAction=null;$("gateBox").style.display="none";$("gateForm").classList.add("on");$("pin").focus()};
+  $("pin").onkeydown=e=>{if(e.key==="Enter")tryUnlock()};
+  $("btnUnlock").onclick=tryUnlock;
+  $("btnLock").onclick=()=>{try{localStorage.removeItem("zaem-ok")}catch(e){};setUnlocked(false);$("adminBox").classList.remove("on")};
+  $("kSched").onclick=()=>prefill("scheduled");
+  $("kEarly").onclick=()=>prefill("early");
+  $("payDate").oninput=updateHint;$("payAmt").oninput=updateHint;
+  $("btnAdd").onclick=()=>{
+    const date=$("payDate").value,amount=Math.round(Number(String($("payAmt").value).replace(/\s/g,"").replace(",",".")));
+    if(!date||!(amount>0)){msg("Нужны дата и сумма");return}
+    if(cmp(date,M0.disbursedOn)<0){msg("Дата раньше выдачи займа");return}
+    if(model.snap.remaining<=0){msg("Долг уже закрыт");return}
+    const before=model.snap;
+    payments.push({id:"p-"+date+"-"+amount+"-"+Date.now().toString(36),date,amount,kind});
+    saveAll();render();
+    const posted=model.snap.posted.find(p=>p.date===date&&Math.abs(p.amount-amount)<.01)||{};
+    flash("Записано "+X(amount)+": в тело "+X(posted.principal??0)+", проценты "+X(posted.interest??0));
+    $("payAmt").value=String(M0.monthlyPayment);
+    publishPays();
+  };
+  $("btnSaveTok").onclick=()=>{const t=$("ghToken").value.trim();if(t)localStorage.setItem("zaem-gh",t);else localStorage.removeItem("zaem-gh");msg(t?"Токен сохранён в этом браузере":"Токен удалён")};
+  $("btnPub").onclick=publishPays;
+  $("ledger").onclick=e=>{
+    const b=e.target.closest&&e.target.closest("[data-del]");if(!b)return;
+    const id=b.getAttribute("data-del");
+    needUnlock(()=>{payments=payments.filter(p=>p.id!==id);saveAll();render();publishPays()});
+  };
+  // старт: сначала кэш (если есть), потом свежие данные
+  render();
+  if(localStorage.getItem("zaem-ok")==="1")setUnlocked(true);
+  refresh();
+  document.addEventListener("visibilitychange",()=>{
+    if(document.visibilityState!=="visible")return;
+    TODAY=todayISO();
+    if(!busy&&Date.now()-lastPublish>120000)refresh();else render();
+  });
+}
+init();
+
 </script>
 </body>
 </html>

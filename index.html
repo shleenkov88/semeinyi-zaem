@@ -640,7 +640,9 @@ function init(){
     if(!date||!(amount>0)){msg("Нужны дата и сумма");return}
     if(cmp(date,M0.disbursedOn)<0){msg("Дата раньше выдачи займа");return}
     if(model.snap.remaining<=0){msg("Долг уже закрыт");return}
-    const before=model.snap;
+    if(busy){msg("Подождите, идёт отправка");return}
+    if(payments.some(p=>p.date===date&&p.amount===amount&&p.kind===kind&&Date.now()-(Number.parseInt(p.id.split("-").pop(),36)||0)<15000)){msg("Такой платёж уже записан");return}
+    $("btnAdd").disabled=true;setTimeout(()=>{$("btnAdd").disabled=false},2500);
     payments.push({id:"p-"+date+"-"+amount+"-"+Date.now().toString(36),date,amount,kind});
     saveAll();render();
     const posted=model.snap.posted.find(p=>p.date===date&&Math.abs(p.amount-amount)<.01)||{};

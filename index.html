@@ -31,6 +31,7 @@ html[data-theme=paper],html[data-theme=paper] body{background:#f3ead8;color:#1a2
 .cab-gate .cab-in{width:9rem}
 .cab-box{display:none;margin-top:1rem;max-width:36rem;border-radius:.75rem;background:var(--color-bg-elevated);padding:1.25rem;box-shadow:var(--shadow-card)}
 .cab-box.on{display:block}
+.cab-row[hidden]{display:none}
 .cab-grid{display:grid;gap:.75rem;grid-template-columns:1fr 1fr}
 .cab-grid label{font-size:.875rem;color:var(--color-fg-muted)}
 .cab-grid label .cab-in{margin-top:.25rem;display:block}
@@ -67,6 +68,13 @@ html[data-theme=paper],html[data-theme=paper] body{background:#f3ead8;color:#1a2
 <div class="mb-6 flex flex-wrap items-end justify-between gap-3"><div><p class="text-[0.7rem] uppercase tracking-[0.22em] text-gold">Семейная книга</p><h2 id="ledger-heading" class="mt-2 font-display text-3xl text-fg sm:text-4xl">Лента платежей</h2></div></div>
 <div class="mb-6 flex flex-wrap gap-2" id="ledBtns"><button type="button" id="btnSched" class="inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium tracking-wide transition-[transform,background-color,color,box-shadow,opacity] duration-150 ease-out enabled:active:scale-[0.96] disabled:cursor-not-allowed disabled:opacity-50 bg-gold text-ink shadow-[0_0_0_1px_color-mix(in_oklab,var(--color-gold)_70%,transparent)]"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus size-4" aria-hidden="true"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>Очередной</button><button type="button" id="btnEarly" class="inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium tracking-wide transition-[transform,background-color,color,box-shadow,opacity] duration-150 ease-out enabled:active:scale-[0.96] disabled:cursor-not-allowed disabled:opacity-50 bg-transparent text-fg shadow-[0_0_0_1px_var(--color-line-strong)]"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-zap size-4" aria-hidden="true"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path></svg>Досрочно</button></div>
 <p class="mb-6 rounded-lg bg-bg-elevated px-5 py-4 text-base leading-relaxed text-fg shadow-[0_0_0_1px_color-mix(in_oklab,var(--color-gold)_40%,transparent)]" id="flash" hidden></p>
+<div class="cab-box" id="adminBox" style="max-width:none;margin:0 0 1.5rem">
+<p class="text-[0.7rem] uppercase tracking-[0.18em] text-gold" id="formTitle">Новый платёж</p>
+<div class="cab-grid" style="margin-top:.75rem"><label>Дата зачисления<input type="date" class="cab-in" id="payDate"/></label><label>Сумма, ₽<input type="number" inputmode="numeric" min="1" class="cab-in" id="payAmt"/></label></div>
+<div class="cab-row" id="quickRow" hidden><button type="button" class="cab-btn ghost" id="qMonthly"></button><button type="button" class="cab-btn ghost" id="qAll"></button></div>
+<p class="mt-3 text-sm leading-relaxed text-fg-subtle" id="payHint"></p>
+<div class="cab-row"><button type="button" class="cab-btn" id="btnAdd">Записать</button><button type="button" class="cab-btn ghost" id="btnCancel">Отмена</button></div>
+</div>
 <div id="firstNote"></div>
 <ol class="relative list-none border-l border-line pl-6 sm:pl-8" id="ledger"></ol>
 <aside class="mt-10 rounded-lg bg-bg-elevated p-5 sm:p-6"><p class="text-[0.7rem] uppercase tracking-[0.18em] text-fg-subtle">Как перевести</p><p class="mt-2 font-display text-xl text-fg">Шлеенкова Светлана Владимировна</p><p class="mt-1 text-fg-muted">Т-Банк по номеру телефона <a href="tel:+79262284056" class="text-gold-bright underline-offset-2 underline">+7 926 228-40-56</a></p><p class="mt-3 text-sm text-fg-subtle">Назначение: «Возврат займа и процентов по договору займа от 26.08.2026»</p>
@@ -84,14 +92,10 @@ html[data-theme=paper],html[data-theme=paper] body{background:#f3ead8;color:#1a2
 <footer class="px-5 pb-16 pt-8 sm:px-8"><div class="mx-auto max-w-6xl"><div class="gold-rule mb-8" aria-hidden="true"></div><p class="max-w-2xl text-sm leading-relaxed text-fg-muted">Это наглядное приложение к договору займа № 1 от 26 августа 2026 г.. Юридическую силу имеет бумажный договор.</p><p class="mt-4 text-xs text-fg-subtle">Москва · Шлеенкова Светлана Владимировна и Шлеенков Андрей Николаевич</p>
 <p class="mt-6 text-xs text-fg-subtle" id="gateBox"><button type="button" class="cab-link" id="openCab">Кабинет</button></p>
 <div class="cab-gate" id="gateForm"><input type="password" class="cab-in" id="pin" inputmode="numeric" autocomplete="off" placeholder="Пароль" aria-label="Пароль"/><button type="button" class="cab-btn" id="btnUnlock">Открыть</button><span class="cab-err" id="pinErr"></span></div>
-<div class="cab-box" id="adminBox">
-<p class="text-[0.7rem] uppercase tracking-[0.18em] text-gold" id="formTitle">Новый платёж</p>
-<div class="cab-grid" style="margin-top:.75rem"><label>Дата зачисления<input type="date" class="cab-in" id="payDate"/></label><label>Сумма, ₽<input type="number" inputmode="numeric" min="1" class="cab-in" id="payAmt" value="25000"/></label></div>
-<div class="cab-row"><button type="button" class="cab-btn" id="kSched">Очередной</button><button type="button" class="cab-btn ghost" id="kEarly">Досрочно</button></div>
-<p class="mt-3 text-sm leading-relaxed text-fg-subtle" id="payHint"></p>
-<div class="cab-row"><button type="button" class="cab-btn" id="btnAdd">Записать и отправить</button><button type="button" class="cab-btn ghost" id="btnLock">Выйти</button></div>
-<p class="cab-msg" id="adminMsg"></p>
+<div class="cab-box" id="cabTools" style="margin-top:1rem">
+<p class="text-[0.7rem] uppercase tracking-[0.18em] text-gold">Кабинет</p>
 <details class="cab-tok" id="tokBox"><summary>Токен GitHub</summary><input type="password" class="cab-in" id="ghToken" placeholder="github_pat_…" autocomplete="off" aria-label="Токен GitHub"/><div class="cab-row"><button type="button" class="cab-btn ghost" id="btnSaveTok">Сохранить токен</button><button type="button" class="cab-btn ghost" id="btnPub">Отправить ещё раз</button></div></details>
+<div class="cab-row"><button type="button" class="cab-btn ghost" id="btnLock">Выйти из кабинета</button></div>
 </div>
 </div></footer>
 </div>
@@ -531,7 +535,7 @@ async function refresh(){
 /* ===== Кабинет ===== */
 const b64=str=>{const u=new TextEncoder().encode(str);let s="";u.forEach(n=>s+=String.fromCharCode(n));return btoa(s)};
 function hashPin(s){let h=0;for(let i=0;i<s.length;i++)h=((h<<5)-h)+s.charCodeAt(i)|0;return h}
-function msg(t){$("adminMsg").textContent=t||""}
+function msg(t){if(t)flash(t)}
 function flash(t){const f=$("flash");f.textContent=t;f.hidden=false;clearTimeout(flash.t);flash.t=setTimeout(()=>{f.hidden=true},5000)}
 async function publishPays(){
   const token=(localStorage.getItem("zaem-gh")||"").trim();
@@ -552,22 +556,32 @@ async function publishPays(){
 }
 function setKind(k){
   kind=k;
-  $("kSched").classList.toggle("ghost",k!=="scheduled");$("kEarly").classList.toggle("ghost",k!=="early");
+  $("quickRow").hidden=k!=="early";
   updateHint();
 }
 function prefill(k){
   const s=model.snap;setKind(k);
-  if(k==="scheduled"){$("payDate").value=s.nextPaymentOn??M0.firstPaymentOn;$("payAmt").value=M0.monthlyPayment}
-  else{const t=todayISO();$("payDate").value=cmp(t,s.lastAccrualStart)<0?s.lastAccrualStart:t;$("payAmt").value=""}
+  const t=todayISO();
+  $("payDate").value=cmp(t,M0.disbursedOn)<0?M0.disbursedOn:t;
+  if(k==="scheduled")$("payAmt").value=String(M0.monthlyPayment);
+  else{
+    $("payAmt").value="";
+    $("qMonthly").textContent=X(M0.monthlyPayment);
+    $("qAll").textContent="закрыть всё · "+X(payoffFor($("payDate").value));
+  }
   updateHint();
+}
+function payoffFor(date){
+  const s=model.snap;
+  return Math.round((s.remaining+interestFor(s.remaining,s.lastAccrualStart,date,model.sch))*100)/100;
 }
 function setUnlocked(on){
   unlocked=!!on;
   $("gateBox").style.display=on?"none":"";
   $("gateForm").classList.remove("on");
-  $("adminBox").classList.toggle("on",on);
+  $("cabTools").classList.toggle("on",on);
+  if(!on)$("adminBox").classList.remove("on");
   if(on){
-    if(!$("payDate").value)prefill(kind);
     $("ghToken").value=localStorage.getItem("zaem-gh")||"";
     $("tokBox").open=!localStorage.getItem("zaem-gh");
   }
@@ -588,7 +602,7 @@ function tryUnlock(){
     const fn=pendingAction;pendingAction=null;if(fn)fn();
   }else $("pinErr").textContent="Не тот пароль";
 }
-function openForm(k){prefill(k);$("adminBox").scrollIntoView({block:"center",behavior:"smooth"})}
+function openForm(k){prefill(k);$("adminBox").classList.add("on");$("adminBox").scrollIntoView({block:"center",behavior:"smooth"});setTimeout(()=>$("payAmt").focus({preventScroll:true}),350)}
 
 function init(){
   // тема
@@ -615,10 +629,12 @@ function init(){
   $("openCab").onclick=()=>{pendingAction=null;$("gateBox").style.display="none";$("gateForm").classList.add("on");$("pin").focus()};
   $("pin").onkeydown=e=>{if(e.key==="Enter")tryUnlock()};
   $("btnUnlock").onclick=tryUnlock;
-  $("btnLock").onclick=()=>{try{localStorage.removeItem("zaem-ok")}catch(e){};setUnlocked(false);$("adminBox").classList.remove("on")};
-  $("kSched").onclick=()=>prefill("scheduled");
-  $("kEarly").onclick=()=>prefill("early");
-  $("payDate").oninput=updateHint;$("payAmt").oninput=updateHint;
+  $("btnLock").onclick=()=>{try{localStorage.removeItem("zaem-ok")}catch(e){};setUnlocked(false)};
+  $("btnCancel").onclick=()=>$("adminBox").classList.remove("on");
+  $("qMonthly").onclick=()=>{$("payAmt").value=String(M0.monthlyPayment);updateHint()};
+  $("qAll").onclick=()=>{$("payAmt").value=String(Math.round(payoffFor($("payDate").value)));updateHint()};
+  $("payDate").oninput=()=>{if(kind==="early")$("qAll").textContent="закрыть всё · "+X(payoffFor($("payDate").value||todayISO()));updateHint()};
+  $("payAmt").oninput=updateHint;
   $("btnAdd").onclick=()=>{
     const date=$("payDate").value,amount=Math.round(Number(String($("payAmt").value).replace(/\s/g,"").replace(",",".")));
     if(!date||!(amount>0)){msg("Нужны дата и сумма");return}
@@ -629,7 +645,7 @@ function init(){
     saveAll();render();
     const posted=model.snap.posted.find(p=>p.date===date&&Math.abs(p.amount-amount)<.01)||{};
     flash("Записано "+X(amount)+": в тело "+X(posted.principal??0)+", проценты "+X(posted.interest??0));
-    $("payAmt").value=String(M0.monthlyPayment);
+    $("adminBox").classList.remove("on");
     publishPays();
   };
   $("btnSaveTok").onclick=()=>{const t=$("ghToken").value.trim();if(t)localStorage.setItem("zaem-gh",t);else localStorage.removeItem("zaem-gh");msg(t?"Токен сохранён в этом браузере":"Токен удалён")};

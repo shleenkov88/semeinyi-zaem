@@ -297,7 +297,7 @@ function renderLedger(m){
   $("firstNote").innerHTML=m.snap.posted.length===0?'<p class="mb-8 max-w-2xl rounded-md bg-bg-elevated px-5 py-4 text-base leading-relaxed text-fg-muted">Первый платёж ожидается '+dateFull(M0.firstPaymentOn)+'. Досрочку можно внести раньше.</p>':"";
   $("btnSched").style.display=$("btnEarly").style.display=m.snap.remaining>0?"":"none";
   $("ledger").innerHTML=m.ledger.map(e=>{
-    const proj=e.status==="projected",canDel=e.status==="posted"||e.status==="final";
+    const proj=e.status==="projected",canDel=unlocked&&(e.status==="posted"||e.status==="final");
     return '<li class="relative list-none pb-8 last:pb-0'+(proj?" opacity-45":"")+'"><span class="absolute -left-[1.45rem] top-1.5 size-2.5 rounded-full sm:-left-[1.7rem] '+(proj?"bg-fg-subtle":"bg-gold")+'"></span><p class="font-display text-xl text-fg">'+dateFull(e.date)+'</p><p class="mt-1 text-fg-muted">'+entryLabel(e)+' · '+X(e.amount)+'</p><p class="mt-1 text-sm text-fg-subtle">в проценты '+X(e.interest)+' · в тело '+X(e.principal)+'</p>'
       +(canDel?'<button type="button" class="cab-del mt-3 inline-flex min-h-11 items-center gap-2 text-sm text-danger" data-del="'+esc(e.id)+'">'+TRASH+'Удалить</button>':"")+'</li>';
   }).join("");

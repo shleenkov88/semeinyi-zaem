@@ -6,8 +6,14 @@
     "kind": "scheduled"
   },
   {
-    "id": "p-2026-09-25-25000-muo49yyw",
-    "date": "2026-09-25",
+    "id": "p-2026-10-25-25000-muo4ltb5",
+    "date": "2026-10-25",
+    "amount": 25000,
+    "kind": "scheduled"
+  },
+  {
+    "id": "p-2026-10-25-25000-muo4lu0g",
+    "date": "2026-10-25",
     "amount": 25000,
     "kind": "scheduled"
   }

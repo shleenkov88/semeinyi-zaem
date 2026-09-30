@@ -101,6 +101,8 @@ html[data-theme=paper],html[data-theme=paper] body{background:#f3ead8;color:#1a2
 </div>
 <script>
 "use strict";
+const SITE_VER="20260930c";
+(function(){try{fetch("index.html?c="+Date.now(),{cache:"no-store"}).then(r=>r.text()).then(t=>{const m=t.match(/SITE_VER="([^"]+)"/);if(m&&m[1]!==SITE_VER&&!/[?&]v=/.test(location.search))location.replace(location.pathname+"?v="+m[1])}).catch(()=>{})}catch(e){}})();
 /* ===== Договор и расчёты (порт логики полного сайта) ===== */
 const M0={principal:1400000,monthlyPayment:25000,paymentDay:25,firstPaymentOn:"2026-09-25",disbursedOn:"2026-08-26",signedOn:"2026-08-26",initialLoanRate:15,
  payTo:{bank:"Т-Банк",phone:"+7 926 228-40-56",recipient:"Шлеенкова Светлана Владимировна",purpose:"Возврат займа и процентов по договору займа от 26.08.2026"}};

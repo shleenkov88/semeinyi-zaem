@@ -4,5 +4,11 @@
     "date": "2026-09-25",
     "amount": 25000,
     "kind": "scheduled"
+  },
+  {
+    "id": "p-2026-10-25",
+    "date": "2026-10-25",
+    "amount": 25000,
+    "kind": "scheduled"
   }
 ]

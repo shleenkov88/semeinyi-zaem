@@ -233,11 +233,11 @@ function termWord(e){
   const r=t===0?"":t%10==1&&t%100!=11?t+" год":t%10>=2&&t%10<=4&&(t%100<10||t%100>=20)?t+" года":t+" лет";
   return t===0?monthsWord(n):n===0?r:r+" "+monthsWord(n);
 }
-const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&","<":"<",">":">",'"':""","'":"&#39;"}[c]));
 
 /* ===== Состояние ===== */
 const $=id=>document.getElementById(id);
-const PIN_H=1482813072,GH={owner:"shleenkov88",repo:"semeinyi-zaem",path:"payments.json",branch:"main"};
+const PIN_H=1680592640,GH={owner:"shleenkov88",repo:"semeinyi-zaem",path:"payments.json",branch:"main"};
 let payments=[],cbr={...CBR_DEFAULT},sliderCbr=CBR_DEFAULT.rate,sliderTouched=false;
 let kind="scheduled",unlocked=false,busy=false,lastPublish=0,loaded=false,model=null,TODAY=todayISO();
 

@@ -233,7 +233,7 @@ function termWord(e){
   const r=t===0?"":t%10==1&&t%100!=11?t+" год":t%10>=2&&t%10<=4&&(t%100<10||t%100>=20)?t+" года":t+" лет";
   return t===0?monthsWord(n):n===0?r:r+" "+monthsWord(n);
 }
-const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':""","'":"&#39;"}[c]));
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 
 /* ===== Состояние ===== */
 const $=id=>document.getElementById(id);
